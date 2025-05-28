@@ -1,35 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   table.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/05/28 21:04:03 by ego              ###   ########.fr       */
+/*   Created: 2025/05/28 20:46:00 by ego               #+#    #+#             */
+/*   Updated: 2025/05/28 20:49:36 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#include "philo.h"
 
-# include <string.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <sys/time.h>
-# include <pthread.h>
-# include <limits.h>
-
-typedef struct s_table
+t_table	*get_table(int ac, char **av)
 {
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	min_lunches;
-}	t_table;
+	t_table	*table;
 
-int		ft_strcmp(const char *s1, const char *s2);
-void	*ft_calloc(size_t nmemb, size_t size);
-
-#endif
+	table = (t_table *)ft_calloc(1, sizeof(t_table));
+	if (!table)
+		return (NULL);
+	ac = 0;
+	av = 0;
+	return (table);
+}
