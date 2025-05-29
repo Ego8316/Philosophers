@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 20:26:05 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 21:37:29 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	main(int ac, char **av)
 		return (errmsg("Invalid user input.\n", 0, 0, 1));
 	table = get_table(ac, av);
 	if (!table)
-		return (errmsg("malloc: failed allocation\n", 0, 0, 1));
+		return (errmsg("Error building the table\n", 0, 0, 1));
 	print_table(table);
 	free_table(table);
 	return (0);

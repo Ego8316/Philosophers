@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 21:22:13 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 21:39:26 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_table
 
 // Table
 
+t_philo		**get_philos(t_table *table);
 t_table		*get_table(int ac, char **av);
 
 // Time

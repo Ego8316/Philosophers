@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 20:14:14 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 21:00:05 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 21:34:42 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ void	*free_table(t_table *t)
 			destroy_mutexes(t->forks, t->n);
 			free(t->forks);
 		}
+		pthread_mutex_destroy(&t->print_lock);
+		pthread_mutex_destroy(&t->sim_running_lock);
 		free(t);
 	}
 	return (NULL);

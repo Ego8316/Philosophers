@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 20:50:58 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 21:22:01 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 21:40:24 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  * 
  * @return 1 on success, 0 on failure.
  */
-int	initiate_philo_mutexes(t_philo **p, int n)
+static int	initiate_philo_mutexes(t_philo **p, int n)
 {
 	int	i;
 
