@@ -6,7 +6,7 @@
 #    By: ego <ego@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/25 18:54:06 by ego               #+#    #+#              #
-#    Updated: 2025/05/29 17:50:49 by ego              ###   ########.fr        #
+#    Updated: 2025/05/29 20:07:18 by ego              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,7 +76,7 @@ header	:
 			printf "============================\n"
 			printf "$(COLOR_R)           __    _ __    $(C_RESET)\n"
 			printf "$(COLOR_O)    ____  / /_  (_) /___ $(C_RESET)\n"
-			printf "$(COLOR_Y)   / __ \/ __ \/ / / __ \$(C_RESET)\n"
+			printf "$(COLOR_Y)   / __ \/ __ \/ / / __ \ $(C_RESET)\n"
 			printf "$(COLOR_G)  / /_/ / / / / / / /_/ /$(C_RESET)\n"
 			printf "$(COLOR_B) / .___/_/ /_/_/_/\____/ $(C_RESET)\n"
 			printf "$(COLOR_I)/_/                      $(C_RESET)\n"

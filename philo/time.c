@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 17:40:45 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 17:54:05 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 17:56:53 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ time_t	get_time_in_ms(void)
  * small durations, often oversleeping due to OS scheduling or process delays.
  * This function mitigates that by continously polling the actual time,
  * ensuring a more accurate sleep duration, which is needed for this project.
+ * Also helps avoiding conversion errors.
  * 
  * @param wait_time Duration to sleep in milliseconds.
  */

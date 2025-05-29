@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:14:21 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 15:06:26 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 20:07:00 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,21 @@ int	errmsg(const char *s1, const char *s2, const char *s3, int status)
 	if (status)
 		ft_putstr_fd(C_RESET, STDERR_FILENO);
 	return (status);
+}
+
+/**
+ * @brief Prints one string in red to the standard error and returns NULL.
+ * 
+ * @param s String to be printed.
+ * 
+ * @return Always returns NULL for convenience.
+ */
+void	*errmsg_null(const char *s)
+{
+	ft_putstr_fd(COLOR_R, STDERR_FILENO);
+	ft_putstr_fd(s, STDERR_FILENO);
+	ft_putstr_fd(C_RESET, STDERR_FILENO);
+	return (NULL);
 }
 
 /**

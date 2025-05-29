@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 17:50:25 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 19:49:44 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 # include <limits.h>
 
 # define MAX_PHILO 249
+# define MALLOC_ERROR "malloc error: memory allocation failed"
+# define MUTEX_ERROR "mutex error: mutex creation failed"
+# define THREAD_ERROR "thread error: thread creation failed"
 # define COLOR_R "\033[31m"
 # define COLOR_G "\033[32m"
 # define COLOR_B "\033[34m"
@@ -54,11 +57,11 @@ typedef struct s_table
 	time_t			time_to_eat;
 	time_t			time_to_sleep;
 	int				meals_required;
-	pthread_t		reaper;
+	t_philo			**philos;
 	pthread_mutex_t	print_lock;
 	pthread_mutex_t	*fork_locks;
 	time_t			start_time;
-	t_philo			**philos;
+	pthread_t		reaper;
 }	t_table;
 
 // Table
@@ -73,9 +76,10 @@ void		delay_start(time_t start_time);
 
 // Utilities
 
-int			ft_atoi(const char *nptr);
 int			ft_strcmp(const char *s1, const char *s2);
 void		*ft_calloc(size_t nmemb, size_t size);
+void		swap_int(int *a, int *b);
+int			ft_atoi(const char *nptr);
 int			ft_isspace(int c);
 int			ft_isdigit(int c);
 
@@ -84,6 +88,7 @@ int			ft_isdigit(int c);
 int			is_valid_input(int ac, char **av);
 int			put_help_message(int ac);
 int			errmsg(const char *s1, const char *s2, const char *s3, int s);
+void		*errmsg_null(const char *s);
 void		ft_putchar_fd(char c, int fd);
 void		ft_putstr_fd(const char *s, int fd);
 void		ft_putnbr_fd(int n, int fd);

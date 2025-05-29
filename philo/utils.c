@@ -6,11 +6,27 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:43:58 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 17:45:40 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 18:03:31 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+/**
+ * @brief Swaps the values of two pointers to integers.
+ * 
+ * @param a First pointer.
+ * @param b Second pointer.
+ */
+void	swap_int(int *a, int *b)
+{
+	int	c;
+
+	c = *b;
+	*b = *a;
+	*a = c;
+	return ;
+}
 
 /** 
  * @brief Compares two strings lexicographically.
