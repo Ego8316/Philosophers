@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 20:14:14 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 21:34:42 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/30 01:19:32 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,11 @@ void	*free_array(void **arr, int size)
 }
 
 /**
- * @brief Frees up to `size` philo structures in an array of philos. Also
+ * @brief Frees up to `size` philo structures in an array of philosophers. Also
  * destroys all initiated mutexes.
  * 
- * @param p Pointer to the philo structure.
+ * @param p Array of philosophers.
+ * @param size Size of the array.
  * 
  * @return Always returns NULL for convenience.
  */
@@ -68,6 +69,24 @@ void	*free_philos(t_philo **p, int size)
 	if (p)
 		free(p);
 	return (NULL);
+}
+
+/**
+ * @brief Joins up to `size` philosopher's threads of an array of philosophers.
+ * 
+ * @param p Array of philosophers.
+ * @param size Size of the array.
+ * 
+ * @return Always returns 0 for convenience.
+ */
+int	join_philos(t_philo **p, int size)
+{
+	int	i;
+
+	i = -1;
+	while (++i < size)
+		pthread_join(p[i]->thread, 0);
+	return (0);
 }
 
 /**

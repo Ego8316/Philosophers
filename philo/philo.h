@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 22:13:18 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/30 01:24:49 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,20 @@ typedef struct s_table
 
 t_table		*get_table(int ac, char **av);
 
+// Routines
+void		*philo_routine(void *d);
+void		*reaper_routine(void *d);
+
 // Time
 time_t		get_time_in_ms(void);
 void		ft_usleep(time_t wait_time);
 void		delay_start(time_t start_time);
 
-// Free and destroy functions
+// Free, join and destroy functions
 void		destroy_mutexes(pthread_mutex_t *m, int size);
 void		*free_array(void **arr, int size);
 void		*free_philos(t_philo **p, int size);
+int			join_philos(t_philo **p, int size);
 void		*free_table(t_table *t);
 
 // Utilities
