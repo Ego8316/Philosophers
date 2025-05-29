@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 19:49:44 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 21:22:13 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 # include <limits.h>
 
 # define MAX_PHILO 249
-# define MALLOC_ERROR "malloc error: memory allocation failed"
-# define MUTEX_ERROR "mutex error: mutex creation failed"
-# define THREAD_ERROR "thread error: thread creation failed"
+# define MALLOC_ERR "malloc error: memory allocation failed"
+# define MUTEX_ERR "mutex error: mutex initialization failed"
+# define THREAD_ERR "thread error: thread creation failed"
 # define COLOR_R "\033[31m"
 # define COLOR_G "\033[32m"
 # define COLOR_B "\033[34m"
@@ -43,23 +43,26 @@ typedef struct s_philo
 	int				id;
 	int				meals_eaten;
 	time_t			last_meal_time;
-	pthread_t		thread;
 	int				left_fork;
 	int				right_fork;
-	t_status		status;
+	pthread_mutex_t	last_meal_lock;
+	pthread_mutex_t	meals_lock;
+	pthread_t		thread;
 	struct s_table	*table;
 }	t_philo;
 
 typedef struct s_table
 {
-	int				n_philos;
+	int				n;
 	time_t			time_to_die;
 	time_t			time_to_eat;
 	time_t			time_to_sleep;
 	int				meals_required;
+	int				sim_running;
 	t_philo			**philos;
 	pthread_mutex_t	print_lock;
-	pthread_mutex_t	*fork_locks;
+	pthread_mutex_t	sim_running_lock;
+	pthread_mutex_t	*forks;
 	time_t			start_time;
 	pthread_t		reaper;
 }	t_table;
@@ -67,12 +70,17 @@ typedef struct s_table
 // Table
 
 t_table		*get_table(int ac, char **av);
-void		*free_table(t_table *t);
 
 // Time
 time_t		get_time_in_ms(void);
 void		ft_usleep(time_t wait_time);
 void		delay_start(time_t start_time);
+
+// Free and destroy functions
+void		destroy_mutexes(pthread_mutex_t *m, int size);
+void		*free_array(void **arr, int size);
+void		*free_philos(t_philo **p, int size);
+void		*free_table(t_table *t);
 
 // Utilities
 

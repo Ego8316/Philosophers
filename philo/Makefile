@@ -6,7 +6,7 @@
 #    By: ego <ego@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/25 18:54:06 by ego               #+#    #+#              #
-#    Updated: 2025/05/29 20:07:18 by ego              ###   ########.fr        #
+#    Updated: 2025/05/29 20:59:57 by ego              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,8 @@ SRCS		=	main.c		\
 				argument.c	\
 				display.c	\
 				error.c		\
+				free.c		\
+				philo.c		\
 				table.c		\
 				time.c		\
 				utils.c

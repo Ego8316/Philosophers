@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 17:51:04 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 20:26:05 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	print_table(t_table *t)
 {
-	printf("Number of philosophers:\t%i\n", t->n_philos);
+	printf("Number of philosophers:\t%i\n", t->n);
 	printf("Time to die:\t\t%li\n", t->time_to_die);
 	printf("Time to eat:\t\t%li\n", t->time_to_eat);
 	printf("Time to sleep:\t\t%li\n", t->time_to_sleep);
