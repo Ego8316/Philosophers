@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   write.c                                            :+:      :+:    :+:   */
+/*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:40:19 by ego               #+#    #+#             */
-/*   Updated: 2025/05/28 20:40:29 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 14:57:31 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,37 @@ void	ft_putendl_fd(const char *s, int fd)
 	ft_putstr_fd(s, fd);
 	ft_putchar_fd('\n', fd);
 	return ;
+}
+
+/**
+ * @brief Returns a descriptive label for each program argument.
+ *
+ * This function maps an integer index to a predefined string label
+ * representing one of the expected command-line arguments for the program.
+ * The labels are:
+ * @brief - 0: "number_of_philosophers"
+ * @brief - 1: "time_to_die"
+ * @brief - 2: "time_to_sleep"
+ * @brief - 3: "number_of_times_each_philosopher_must_eat"
+ *
+ * @param i Index of the argument (from 0 to 3).
+ *
+ * @return A constant string describing the argument at position i, NULL if the
+ * index is out of bounds.
+ *
+ * @warning The returned string must not be modified.
+ */
+const char	*arg_label(int i)
+{
+	const char	*labels[] = {
+		"number_of_philosophers",
+		"time_to_die",
+		"time_to_eat",
+		"time_to_sleep",
+		"number_of_times_each_philosopher_must_eat"
+	};
+
+	if (i < 0 || i > 4)
+		return (NULL);
+	return (labels[i]);
 }

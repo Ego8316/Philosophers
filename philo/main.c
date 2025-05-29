@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 13:24:43 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 14:59:33 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ int	main(int ac, char **av)
 	t_table	*table;
 
 	if (ac < 5 || ac > 6)
-		return (put_help_message());
+		return (put_help_message(ac));
+	if (!is_valid_input(ac, av))
+		return (errmsg("Invalid user input.\n", 0, 0, 1));
 	table = get_table(ac, av);
 	if (!table)
 		return (errmsg("malloc: failed allocation\n", 0, 0, 1));

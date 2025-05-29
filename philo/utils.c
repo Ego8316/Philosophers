@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:43:58 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 12:57:48 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 14:06:35 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,37 @@ void	*ft_calloc(size_t nmemb, size_t size)
 		return (NULL);
 	memset(array, 0, nmemb * size);
 	return (array);
+}
+
+/** 
+ * @brief Converts a string to an integer.
+ * 
+ * @param str The string to convert.
+ * 
+ * @return The integer value of the string.
+ */
+int	ft_atoi(const char *nptr)
+{
+	int	nb;
+	int	i;
+	int	sign;
+
+	nb = 0;
+	i = 0;
+	sign = 1;
+	while (ft_isspace(nptr[i]))
+		i++;
+	if (nptr[i] == '-' || nptr[i] == '+')
+	{
+		sign = -(nptr[i] - 44);
+		i++;
+	}
+	if (sign < 0 && !ft_strcmp("2147483648", nptr + i))
+		return (-2147483648);
+	while (ft_isdigit(nptr[i]))
+	{
+		nb = nb * 10 + (nptr[i] - '0');
+		i++;
+	}
+	return (nb * sign);
 }
