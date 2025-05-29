@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 14:59:33 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 17:51:04 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 void	print_table(t_table *t)
 {
-	printf("Number of philosophers:\t%i\n", t->philo_number);
-	printf("Time to die:\t\t%i\n", t->time_to_die);
-	printf("Time to eat:\t\t%i\n", t->time_to_eat);
-	printf("Time to sleep:\t\t%i\n", t->time_to_sleep);
-	printf("Minimal lunches:\t%i\n", t->min_lunches);
+	printf("Number of philosophers:\t%i\n", t->n_philos);
+	printf("Time to die:\t\t%li\n", t->time_to_die);
+	printf("Time to eat:\t\t%li\n", t->time_to_eat);
+	printf("Time to sleep:\t\t%li\n", t->time_to_sleep);
+	printf("Minimal lunches:\t%i\n", t->meals_required);
+	printf("Start time:\t%li\n", t->start_time);
 }
 
 int	main(int ac, char **av)

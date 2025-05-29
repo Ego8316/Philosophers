@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 14:59:26 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 17:50:25 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,55 @@
 # include <pthread.h>
 # include <limits.h>
 
+# define MAX_PHILO 249
 # define COLOR_R "\033[31m"
 # define COLOR_G "\033[32m"
 # define COLOR_B "\033[34m"
 # define C_RESET "\033[0m"
 
+typedef enum e_status
+{
+	DECEASED,
+	EATING,
+	SLEEPING,
+	THINKING
+}	t_status;
+
+typedef struct s_philo
+{
+	int				id;
+	int				meals_eaten;
+	time_t			last_meal_time;
+	pthread_t		thread;
+	int				left_fork;
+	int				right_fork;
+	t_status		status;
+	struct s_table	*table;
+}	t_philo;
+
 typedef struct s_table
 {
-	int	philo_number;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	min_lunches;
+	int				n_philos;
+	time_t			time_to_die;
+	time_t			time_to_eat;
+	time_t			time_to_sleep;
+	int				meals_required;
+	pthread_t		reaper;
+	pthread_mutex_t	print_lock;
+	pthread_mutex_t	*fork_locks;
+	time_t			start_time;
+	t_philo			**philos;
 }	t_table;
 
 // Table
 
 t_table		*get_table(int ac, char **av);
 void		*free_table(t_table *t);
+
+// Time
+time_t		get_time_in_ms(void);
+void		ft_usleep(time_t wait_time);
+void		delay_start(time_t start_time);
 
 // Utilities
 

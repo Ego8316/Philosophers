@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:31:01 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 15:17:22 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 17:07:45 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ int	is_valid_input(int ac, char **av)
 			ret = errmsg(arg_label(i), ": negative value\n", 0, 0);
 		else if (value == 0)
 			ret = errmsg(arg_label(i), ": null value\n", 0, 0);
+		else if (i == 0 && value > MAX_PHILO)
+			ret = errmsg(arg_label(i), ": too many philosophers\n", 0, 0);
 	}
 	return (ret);
 }
