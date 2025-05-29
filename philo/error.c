@@ -6,11 +6,27 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:14:21 by ego               #+#    #+#             */
-/*   Updated: 2025/05/28 20:46:54 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 13:16:16 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+/**
+ * @brief Displays on the standard error a help message.
+ * 
+ * @return Always returns 1 for convenience.
+ */
+int	put_help_message(void)
+{
+	ft_putstr_fd("Invalid number of arguments.\n", STDERR_FILENO);
+	ft_putstr_fd("Usage:\t./philo number_of_philosophers\n\t\t", STDERR_FILENO);
+	ft_putstr_fd("time_to_die\n\t\ttime_to_eat", STDERR_FILENO);
+	ft_putstr_fd("\n\t\ttime_to_sleep\n\t\t", STDERR_FILENO);
+	ft_putstr_fd("[number_of_times_each_philosopher_must_eat]", STDERR_FILENO);
+	ft_putchar_fd('\n', STDERR_FILENO);
+	return (1);
+}
 
 /**
  * @brief Displays on the standard error three strings

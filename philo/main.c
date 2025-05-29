@@ -6,20 +6,31 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/05/27 17:02:01 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 13:24:43 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void	print_table(t_table *t)
+{
+	printf("Number of philosophers:\t%i\n", t->philo_number);
+	printf("Time to die:\t\t%i\n", t->time_to_die);
+	printf("Time to eat:\t\t%i\n", t->time_to_eat);
+	printf("Time to sleep:\t\t%i\n", t->time_to_sleep);
+	printf("Minimal lunches:\t%i\n", t->min_lunches);
+}
+
 int	main(int ac, char **av)
 {
-	int	i;
+	t_table	*table;
 
 	if (ac < 5 || ac > 6)
-		return (1);
-	i = -1;
-	while (++i < ac)
-		printf("%s\n", av[i]);
+		return (put_help_message());
+	table = get_table(ac, av);
+	if (!table)
+		return (errmsg("malloc: failed allocation\n", 0, 0, 1));
+	print_table(table);
+	free_table(table);
 	return (0);
 }

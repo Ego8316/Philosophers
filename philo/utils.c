@@ -6,12 +6,11 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:43:58 by ego               #+#    #+#             */
-/*   Updated: 2025/05/28 20:50:02 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 12:57:48 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
 
 /** 
  * @brief Compares two strings lexicographically.

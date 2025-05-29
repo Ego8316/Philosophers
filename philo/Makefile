@@ -6,11 +6,16 @@
 #    By: ego <ego@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/25 18:54:06 by ego               #+#    #+#              #
-#    Updated: 2025/05/27 17:00:24 by ego              ###   ########.fr        #
+#    Updated: 2025/05/29 12:57:01 by ego              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS		=	main.c
+SRCS		=	main.c		\
+				argument.c	\
+				display.c	\
+				error.c		\
+				table.c		\
+				utils.c
 ODIR		=	objs/
 OBJS		=	$(addprefix $(ODIR), $(SRCS:.c=.o))
 IDIR		=	.

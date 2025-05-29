@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:31:01 by ego               #+#    #+#             */
-/*   Updated: 2025/05/28 20:34:06 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/29 13:12:37 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,59 +36,39 @@ int	ft_isdigit(int c)
 	return (c >= '0' && c <= '9');
 }
 
-/** 
- * @brief Compares two strings lexicographically.
+/**
+ * @brief Checks if the given string represents a valid signed integer.
  * 
- * @param s1 The first string.
- * @param s2 The second string.
+ * Skips leading whitespace characters, allows an optional '+' or '-' sign,
+ * ensures that the rest of the string consists only of digits, and checks if
+ * the parsed number does not overflow or underflow the limits of an integer.
  * 
- * @return 0 if the strings are equal, a positive value if s1 > s2,
- * or a negative value if s1 < s2.
+ * @param s String to be checked.
+ * 
+ * @return 1 if the string is a valid integer within int range, 0 otherwise.
  */
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	int		diff;
-	size_t	i;
-
-	i = 0;
-	while (s1[i] || s2[i])
-	{
-		diff = (unsigned char)s1[i] - (unsigned char)s2[i];
-		if (diff)
-			return (diff);
-		i++;
-	}
-	return (0);
-}
-
-/*	ft_isint
-*	Checks if the given string corresponds to an integer.
-*	Return: 1 if the string is an int, 2 if it is a zero, 0 otherwise.
-*/
-static int	ft_isint(char *s)
+int	is_valid_integer(char *s)
 {
 	int			i;
 	int			j;
 	long int	n;
 
 	i = 0;
-	j = 0;
 	n = 0;
-	if ((s[i] == '+' || s[i] == '-') && s[i + 1])
+	while (ft_isspace(s[i]))
+		i++;
+	j = i;
+	if ((s[i] == '+' || s[i] == '-') && ft_isdigit(s[i + 1]))
 		i++;
 	while (s[i])
 	{
 		if (!ft_isdigit(s[i]))
 			return (0);
-		if (s[i] == '0')
-			j++;
 		n = n * 10 + (s[i] - '0');
-		if (n > ((long int)INT_MAX + (s[0] == '-')))
+		if (n > ((long int)INT_MAX + (s[j] == '-')))
 			return (0);
 		i++;
 	}
-	if ((j + (s[0] == '+' || s[0] == '-')) == i)
-		return (2);
 	return (1);
 }
 
