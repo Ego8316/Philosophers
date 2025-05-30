@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/05/30 01:23:59 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/30 14:20:41 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	print_philo(t_philo *p)
 
 }
 
-void	print_table(t_table *t)
+void	print_table(t_table *t, int p)
 {
 	int	i;
 
@@ -32,7 +32,7 @@ void	print_table(t_table *t)
 	printf("Minimal lunches:\t%i\n", t->meals_required);
 	printf("Start time:\t%li\n", t->start_time);
 	i = -1;
-	while (++i < t->n)
+	while (p && ++i < t->n)
 		print_philo(t->philos[i]);
 }
 
@@ -72,7 +72,14 @@ int	main(int ac, char **av)
 	table = get_table(ac, av);
 	if (!table)
 		return (errmsg("Error building the table\n", 0, 0, 1));
-	print_table(table);
+	print_table(table, 0);
+	table->start_time = get_time_in_ms();
+	table->sim_running = 1;
+	for (int i = 0; i < 5; i++)
+	{
+		print_status(table->philos[2], i);
+		ft_usleep(100);
+	}
 	free_table(table);
 	return (0);
 }

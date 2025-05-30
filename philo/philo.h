@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/05/30 01:24:49 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/30 14:17:50 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,17 @@
 # define COLOR_R "\033[31m"
 # define COLOR_G "\033[32m"
 # define COLOR_B "\033[34m"
+# define COLOR_A "\033[90m"
+# define COLOR_V "\033[38;5;93m"
 # define C_RESET "\033[0m"
 
 typedef enum e_status
 {
-	DECEASED,
-	EATING,
-	SLEEPING,
-	THINKING
+	DECEASED = 0,
+	FORK = 1,
+	EATING = 2,
+	SLEEPING = 3,
+	THINKING = 4
 }	t_status;
 
 typedef struct s_philo
@@ -74,6 +77,10 @@ t_table		*get_table(int ac, char **av);
 // Routines
 void		*philo_routine(void *d);
 void		*reaper_routine(void *d);
+
+// Monitoring
+int			is_simulation_running(t_table *table);
+void		print_status(t_philo *philo, t_status status);
 
 // Time
 time_t		get_time_in_ms(void);
