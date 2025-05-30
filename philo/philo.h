@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/05/30 14:17:50 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/30 18:53:14 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void		*philo_routine(void *d);
 void		*reaper_routine(void *d);
 
 // Monitoring
+int			should_simulation_stop(t_table *table);
 int			is_simulation_running(t_table *table);
 void		print_status(t_philo *philo, t_status status);
 

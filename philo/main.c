@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/05/30 14:20:41 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/30 17:51:54 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	print_philo(t_philo *p)
 	printf("left fork:\t%i\nright fork:\t%i\n", p->left_fork, p->right_fork);
 	printf("meals:\t\t%i\nlast:\t\t%li\n", p->meals_eaten, p->last_meal_time);
 	printf("-------------------\n");
-
 }
 
 void	print_table(t_table *t, int p)
@@ -47,12 +46,13 @@ int	start_simulation(t_table *table)
 {
 	int	i;
 
+	table->sim_running = 1;
 	table->start_time = get_time_in_ms() + 10 * table->n;
 	i = -1;
 	while (++i < table->n)
 	{
 		if (pthread_create(&table->philos[i]->thread, 0, &philo_routine,
-			table->philos[i]) != 0)
+				table->philos[i]) != 0)
 			return (errmsg_null(THREAD_ERR), join_philos(table->philos, i));
 	}
 	if (table->n > 1
@@ -73,13 +73,14 @@ int	main(int ac, char **av)
 	if (!table)
 		return (errmsg("Error building the table\n", 0, 0, 1));
 	print_table(table, 0);
-	table->start_time = get_time_in_ms();
-	table->sim_running = 1;
-	for (int i = 0; i < 5; i++)
+	if (!start_simulation(table))
 	{
-		print_status(table->philos[2], i);
-		ft_usleep(100);
+		free_table(table);
+		return (errmsg("Error starting the simulation\n", 0, 0, 1));
 	}
+	join_philos(table->philos, table->n);
+	if (table->n > 1)
+		pthread_join(table->reaper, 0);
 	free_table(table);
 	return (0);
 }

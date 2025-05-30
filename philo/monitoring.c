@@ -6,11 +6,43 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/05/30 14:16:31 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/30 18:52:52 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	should_philosopher_die(t_philo *p)
+{
+	(void)p;
+	return (0);
+}
+
+int	should_simulation_stop(t_table *table)
+{
+	int	i;
+	int	max_meals_reached;
+
+	i = -1;
+	max_meals_reached = 1;
+	while (++i < table->n)
+	{
+		pthread_mutex_lock(&table->philos[i]->last_meal_lock);
+		if (should_philosopher_die(table->philos[i]))
+		{
+			pthread_mutex_unlock(&table->philos[i]->last_meal_lock);
+			return (1);
+		}
+		pthread_mutex_unlock(&table->philos[i]->last_meal_lock);
+		pthread_mutex_lock(&table->philos[i]->meals_lock);
+		if (table->philos[i]->meals_eaten < table->meals_required)
+			max_meals_reached = 0;
+		pthread_mutex_unlock(&table->philos[i]->meals_lock);
+	}
+	if (table->meals_required > -1 && max_meals_reached)
+		return (1);
+	return (0);
+}
 
 /**
  * @brief Checks if the simulation is still running.
@@ -47,8 +79,9 @@ void	print_status(t_philo *philo, t_status status)
 	if (!is_simulation_running(philo->table) && status != DECEASED)
 		return ;
 	pthread_mutex_lock(&philo->table->print_lock);
-	printf("%s%li\tPhilosopher %i %s%s\n", colors[status], get_time_in_ms()
-		- philo->table->start_time, philo->id, labels[status], C_RESET);
+	printf("%li\tPhilosopher %i %s%s%s\n",
+		get_time_in_ms() - philo->table->start_time,
+		philo->id, colors[status], labels[status], C_RESET);
 	pthread_mutex_unlock(&philo->table->print_lock);
 	return ;
 }

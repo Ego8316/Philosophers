@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:46:00 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 22:19:14 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/30 18:43:35 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ static t_philo	**get_philos(t_table *table)
 		philos[i] = (t_philo *)ft_calloc(1, sizeof(t_philo));
 		if (!philos[i])
 			return (free_array((void **)philos, i), errmsg_null(MALLOC_ERR));
-		philos[i]->id = i;
+		philos[i]->id = i + 1;
 		philos[i]->table = table;
 		philos[i]->left_fork = i;
 		philos[i]->right_fork = (i + 1) % table->n;
