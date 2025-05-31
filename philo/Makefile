@@ -6,7 +6,7 @@
 #    By: ego <ego@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/25 18:54:06 by ego               #+#    #+#              #
-#    Updated: 2025/05/31 14:56:10 by ego              ###   ########.fr        #
+#    Updated: 2025/05/31 18:23:49 by ego              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ OBJS		=	$(addprefix $(ODIR), $(SRCS:.c=.o))
 IDIR		=	.
 INCL		=	-I $(IDIR)
 
-CC			=	clang
+CC			=	cc
 RM			=	rm -rf
 CFLAGS		=	-Wall -Wextra -Werror -pthread
 
