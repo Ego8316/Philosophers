@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/05/31 20:07:50 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/31 22:20:12 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ void	*eat_sleep_routine(t_philo *p)
 	print_status(p, FORK);
 	pthread_mutex_lock(&p->table->forks[p->right_fork]);
 	print_status(p, FORK);
-	print_status(p, EATING);
 	pthread_mutex_lock(&p->last_meal_lock);
 	p->last_meal_time = get_time_in_ms();
 	pthread_mutex_unlock(&p->last_meal_lock);
+	print_status(p, EATING);
 	ft_usleep(p->table->time_to_eat);
 	pthread_mutex_unlock(&p->table->forks[p->left_fork]);
 	pthread_mutex_unlock(&p->table->forks[p->right_fork]);
@@ -132,8 +132,8 @@ void	*philo_routine(void *d)
 		print_status(p, DECEASED);
 		return (NULL);
 	}
-	if (p->id % 2)
-		think_routine(p);
+	// if (p->id % 2)
+	// 	think_routine(p);
 	while (is_simulation_running(p->table))
 	{
 		eat_sleep_routine(p);
