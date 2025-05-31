@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/05/30 17:51:54 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/31 18:31:06 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ int	main(int ac, char **av)
 	table = get_table(ac, av);
 	if (!table)
 		return (errmsg("Error building the table\n", 0, 0, 1));
-	print_table(table, 0);
 	if (!start_simulation(table))
 	{
 		free_table(table);
