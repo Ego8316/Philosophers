@@ -6,11 +6,26 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:43:58 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 18:03:31 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/31 14:42:46 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+/**
+ * @brief Gets the maximum value between two long integers.
+ * 
+ * @param a First long.
+ * @param b Second long.
+ * 
+ * @return The maximum between a and b.
+ */
+long	ft_max(long a, long b)
+{
+	if (a > b)
+		return (a);
+	return (b);
+}
 
 /**
  * @brief Swaps the values of two pointers to integers.

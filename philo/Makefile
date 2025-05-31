@@ -6,7 +6,7 @@
 #    By: ego <ego@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/25 18:54:06 by ego               #+#    #+#              #
-#    Updated: 2025/05/31 14:26:44 by ego              ###   ########.fr        #
+#    Updated: 2025/05/31 14:56:10 by ego              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,17 +25,16 @@ OBJS		=	$(addprefix $(ODIR), $(SRCS:.c=.o))
 IDIR		=	.
 INCL		=	-I $(IDIR)
 
-CC			=	cc
+CC			=	clang
 RM			=	rm -rf
 CFLAGS		=	-Wall -Wextra -Werror -pthread
-CFLAGS		+=	-fsanitize=address -g
 
 NAME		=	philo
 
 all			:	$(NAME)
 
 $(NAME)		:	$(ODIR) $(OBJS)
-				$(CC) $(CFLAGS) $(SRCS) $(INCL) -o $(NAME)
+				$(CC) $(CFLAGS) $(OBJS) $(INCL) -o $(NAME)
 				make -s header
 				printf "$(COLOR_G)[OK] philo is ready!$(C_RESET)\n" || \
 				printf "$(COLOR_R)[KO] Something went wrong.$(C_RESET)\n"

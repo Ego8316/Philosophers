@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/05/31 14:19:49 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/31 18:22:45 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,27 +97,28 @@ void	*eat_sleep_routine(t_philo *p)
  */
 void	*philo_routine(void *d)
 {
-	t_philo	*philo;
+	t_philo	*p;
 
-	philo = (t_philo *)d;
-	pthread_mutex_lock(&philo->last_meal_lock);
-	philo->last_meal_time = philo->table->start_time;
-	pthread_mutex_unlock(&philo->last_meal_lock);
-	delay_start(philo->table->start_time);
-	if (philo->table->n == 1)
+	p = (t_philo *)d;
+	pthread_mutex_lock(&p->last_meal_lock);
+	p->last_meal_time = p->table->start_time;
+	pthread_mutex_unlock(&p->last_meal_lock);
+	delay_start(p->table->start_time);
+	if (p->table->n == 1)
 	{
-		print_status(philo, FORK);
-		ft_usleep(philo->table->time_to_die);
-		print_status(philo, DECEASED);
+		print_status(p, FORK);
+		ft_usleep(p->table->time_to_die);
+		print_status(p, DECEASED);
 		return (NULL);
 	}
-	while (is_simulation_running(philo->table))
+	while (is_simulation_running(p->table))
 	{
-		eat_sleep_routine(philo);
-		if (is_simulation_running(philo->table))
+		eat_sleep_routine(p);
+		if (is_simulation_running(p->table))
 		{
-			print_status(philo, THINKING);
-			ft_usleep(10);
+			print_status(p, THINKING);
+			ft_usleep(ft_max(0, p->table->time_to_die
+					- p->table->time_to_eat - p->table->time_to_sleep));
 		}
 	}
 	return (NULL);

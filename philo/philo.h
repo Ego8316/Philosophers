@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/05/30 18:53:14 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/31 14:42:59 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void		*free_table(t_table *t);
 
 int			ft_strcmp(const char *s1, const char *s2);
 void		*ft_calloc(size_t nmemb, size_t size);
+long		ft_max(long a, long b);
 void		swap_int(int *a, int *b);
 int			ft_atoi(const char *nptr);
 int			ft_isspace(int c);
