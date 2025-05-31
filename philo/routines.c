@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/05/31 18:22:45 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/31 20:07:50 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,27 @@ void	*eat_sleep_routine(t_philo *p)
 	return (NULL);
 }
 
+void	*think_routine(t_philo *p)
+{
+	time_t	time_since_last_meal;
+	time_t	time_to_think;
+
+	print_status(p, THINKING);
+	pthread_mutex_lock(&p->last_meal_lock);
+	time_since_last_meal = get_time_in_ms() - p->last_meal_time;
+	pthread_mutex_unlock(&p->last_meal_lock);
+	time_to_think = (p->table->time_to_die 
+		- time_since_last_meal - p->table->time_to_eat) / 2;
+	if (time_to_think < 0)
+		time_to_think = 0;
+	if (time_to_think > 200)
+		time_to_think = 200;
+	// if (time_to_think > p->table->time_to_die / 5)
+	// 	time_to_think = p->table->time_to_die / 5;
+	ft_usleep(time_to_think);
+	return (NULL);
+}
+
 /**
  * @brief Main routine executed by each philosopher thread.
  * 
@@ -111,15 +132,12 @@ void	*philo_routine(void *d)
 		print_status(p, DECEASED);
 		return (NULL);
 	}
+	if (p->id % 2)
+		think_routine(p);
 	while (is_simulation_running(p->table))
 	{
 		eat_sleep_routine(p);
-		if (is_simulation_running(p->table))
-		{
-			print_status(p, THINKING);
-			ft_usleep(ft_max(0, p->table->time_to_die
-					- p->table->time_to_eat - p->table->time_to_sleep));
-		}
+		think_routine(p);
 	}
 	return (NULL);
 }
