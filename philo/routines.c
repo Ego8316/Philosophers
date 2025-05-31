@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/05/30 18:45:47 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/31 14:19:49 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,20 @@ void	*philo_routine(void *d)
 	philo->last_meal_time = philo->table->start_time;
 	pthread_mutex_unlock(&philo->last_meal_lock);
 	delay_start(philo->table->start_time);
+	if (philo->table->n == 1)
+	{
+		print_status(philo, FORK);
+		ft_usleep(philo->table->time_to_die);
+		print_status(philo, DECEASED);
+		return (NULL);
+	}
 	while (is_simulation_running(philo->table))
 	{
 		eat_sleep_routine(philo);
 		if (is_simulation_running(philo->table))
 		{
 			print_status(philo, THINKING);
-			ft_usleep(50);
+			ft_usleep(10);
 		}
 	}
 	return (NULL);

@@ -6,7 +6,7 @@
 #    By: ego <ego@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/25 18:54:06 by ego               #+#    #+#              #
-#    Updated: 2025/05/30 14:04:34 by ego              ###   ########.fr        #
+#    Updated: 2025/05/31 14:26:44 by ego              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ INCL		=	-I $(IDIR)
 CC			=	cc
 RM			=	rm -rf
 CFLAGS		=	-Wall -Wextra -Werror -pthread
+CFLAGS		+=	-fsanitize=address -g
 
 NAME		=	philo
 

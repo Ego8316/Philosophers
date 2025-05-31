@@ -6,40 +6,35 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/05/30 18:52:52 by ego              ###   ########.fr       */
+/*   Updated: 2025/05/31 14:10:37 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	should_philosopher_die(t_philo *p)
-{
-	(void)p;
-	return (0);
-}
-
-int	should_simulation_stop(t_table *table)
+int	should_simulation_stop(t_table *t)
 {
 	int	i;
 	int	max_meals_reached;
 
 	i = -1;
 	max_meals_reached = 1;
-	while (++i < table->n)
+	while (++i < t->n)
 	{
-		pthread_mutex_lock(&table->philos[i]->last_meal_lock);
-		if (should_philosopher_die(table->philos[i]))
+		pthread_mutex_lock(&t->philos[i]->last_meal_lock);
+		if (get_time_in_ms() - t->philos[i]->last_meal_time > t->time_to_die)
 		{
-			pthread_mutex_unlock(&table->philos[i]->last_meal_lock);
+			print_status(t->philos[i], DECEASED);
+			pthread_mutex_unlock(&t->philos[i]->last_meal_lock);
 			return (1);
 		}
-		pthread_mutex_unlock(&table->philos[i]->last_meal_lock);
-		pthread_mutex_lock(&table->philos[i]->meals_lock);
-		if (table->philos[i]->meals_eaten < table->meals_required)
+		pthread_mutex_unlock(&t->philos[i]->last_meal_lock);
+		pthread_mutex_lock(&t->philos[i]->meals_lock);
+		if (t->philos[i]->meals_eaten < t->meals_required)
 			max_meals_reached = 0;
-		pthread_mutex_unlock(&table->philos[i]->meals_lock);
+		pthread_mutex_unlock(&t->philos[i]->meals_lock);
 	}
-	if (table->meals_required > -1 && max_meals_reached)
+	if (t->meals_required > -1 && max_meals_reached)
 		return (1);
 	return (0);
 }
@@ -62,11 +57,11 @@ int	is_simulation_running(t_table *table)
 void	print_status(t_philo *philo, t_status status)
 {
 	const char	*labels[5] = {
-		"died",
-		"has taken a fork",
-		"is eating",
-		"is thinking",
-		"is sleeping"
+		"died ☠️",
+		"has taken a fork 🍴",
+		"is eating 🍝",
+		"is thinking 🤔",
+		"is sleeping 😴"
 	};
 	const char	*colors[5] = {
 		COLOR_R,
