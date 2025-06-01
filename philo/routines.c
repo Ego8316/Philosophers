@@ -6,14 +6,14 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/06/01 12:19:44 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/01 15:20:57 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 /**
- * @brief Monitor routine that checks for a philosopher death or simulation end.
+ * @brief Monitor routine that checks if the simulation should end.
  * 
  * This function runs in a separate thread and continuously checks whether a
  * philosopher has died or all philosophers have eaten enough. If either
