@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/01 12:11:22 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/01 12:30:56 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ int	main(int ac, char **av)
 		free_table(table);
 		return (errmsg("Error starting the simulation\n", 0, 0, 1));
 	}
-	join_philos(table->philos, table->n);
 	if (table->n > 1)
 		pthread_join(table->reaper, 0);
+	join_philos(table->philos, table->n);
 	free_table(table);
 	return (0);
 }

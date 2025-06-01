@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 17:40:45 by ego               #+#    #+#             */
-/*   Updated: 2025/05/31 22:13:44 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/01 14:27:38 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	ft_usleep(time_t wait_time)
 
 	start = get_time_in_ms();
 	while (get_time_in_ms() - start < wait_time)
-		usleep(50);
+		usleep(100);
 	return ;
 }
 
