@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/05/31 14:42:59 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/01 12:07:17 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <pthread.h>
 # include <limits.h>
 
-# define MAX_PHILO 249
+# define MAX_PHILO 200
 # define MALLOC_ERR "malloc error: memory allocation failed"
 # define MUTEX_ERR "mutex error: mutex initialization failed"
 # define THREAD_ERR "thread error: thread creation failed"

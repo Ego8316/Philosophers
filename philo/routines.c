@@ -6,12 +6,24 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/05/31 22:20:12 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/01 12:19:44 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/**
+ * @brief Monitor routine that checks for a philosopher death or simulation end.
+ * 
+ * This function runs in a separate thread and continuously checks whether a
+ * philosopher has died or all philosophers have eaten enough. If either
+ * condition is met, sets the shared `sim_running` flag to 0 to terminate the
+ * simulation.
+ * 
+ * @param d A void pointer to the table structure.
+ * 
+ * @return Always returns NULL.
+ */
 void	*reaper_routine(void *d)
 {
 	t_table	*table;
@@ -52,7 +64,7 @@ void	*reaper_routine(void *d)
  * @note This function should be called within a thread created for a
  * philosopher.
  */
-void	*eat_sleep_routine(t_philo *p)
+static void	*eat_sleep_routine(t_philo *p)
 {
 	pthread_mutex_lock(&p->table->forks[p->left_fork]);
 	print_status(p, FORK);
@@ -76,7 +88,17 @@ void	*eat_sleep_routine(t_philo *p)
 	return (NULL);
 }
 
-void	*think_routine(t_philo *p)
+/**
+ * @brief Simulates the philosopher thinking for a calculated duration. The
+ * thinking time is computed based on the time to die, the time since the last
+ * meal and the time to eat. It is also capped to a maximum of 200ms and a
+ * minimum of 0.
+ * 
+ * @param p Pointer to the philosopher structure.
+ * 
+ * @return Always returns NULL.
+ */
+static void	*think_routine(t_philo *p)
 {
 	time_t	time_since_last_meal;
 	time_t	time_to_think;
@@ -85,14 +107,12 @@ void	*think_routine(t_philo *p)
 	pthread_mutex_lock(&p->last_meal_lock);
 	time_since_last_meal = get_time_in_ms() - p->last_meal_time;
 	pthread_mutex_unlock(&p->last_meal_lock);
-	time_to_think = (p->table->time_to_die 
-		- time_since_last_meal - p->table->time_to_eat) / 2;
+	time_to_think = (p->table->time_to_die
+			- time_since_last_meal - p->table->time_to_eat) / 2;
 	if (time_to_think < 0)
 		time_to_think = 0;
 	if (time_to_think > 200)
 		time_to_think = 200;
-	// if (time_to_think > p->table->time_to_die / 5)
-	// 	time_to_think = p->table->time_to_die / 5;
 	ft_usleep(time_to_think);
 	return (NULL);
 }
@@ -132,8 +152,6 @@ void	*philo_routine(void *d)
 		print_status(p, DECEASED);
 		return (NULL);
 	}
-	// if (p->id % 2)
-	// 	think_routine(p);
 	while (is_simulation_running(p->table))
 	{
 		eat_sleep_routine(p);

@@ -6,41 +6,24 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/05/31 18:47:10 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/01 12:11:22 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	print_philo(t_philo *p)
-{
-	printf("----- Philo %i -----\n", p->id);
-	printf("left fork:\t%i\nright fork:\t%i\n", p->left_fork, p->right_fork);
-	printf("meals:\t\t%i\nlast:\t\t%li\n", p->meals_eaten, p->last_meal_time);
-	printf("-------------------\n");
-}
-
-void	print_table(t_table *t, int p)
-{
-	int	i;
-
-	printf("Number of philosophers:\t%i\n", t->n);
-	printf("Time to die:\t\t%li\n", t->time_to_die);
-	printf("Time to eat:\t\t%li\n", t->time_to_eat);
-	printf("Time to sleep:\t\t%li\n", t->time_to_sleep);
-	printf("Minimal lunches:\t%i\n", t->meals_required);
-	printf("Start time:\t%li\n", t->start_time);
-	i = -1;
-	while (p && ++i < t->n)
-		print_philo(t->philos[i]);
-}
-
 /**
- * @brief Starts the simulation.
+ * @brief Launches the philosopher simulation.
+ * 
+ * Initializes the simulation's start time with a delay to allow threads to be
+ * perfectly synchronized, sets its flag as running and creates a thread for
+ * each philosopher. If there is more than one philosopher, also creates a
+ * thread for the reaper to monitor their states. If any thread creation
+ * fails, joins all previously created ones.
  * 
  * @param table Pointer to the table structure.
  * 
- * @return 1 if successful, 0 otherwise.
+ * @return 1 if all threads are successfully created, 0 otherwise.
  */
 int	start_simulation(t_table *table)
 {
@@ -61,6 +44,17 @@ int	start_simulation(t_table *table)
 	return (1);
 }
 
+/**
+ * @brief Entry point of the philosopher simulation.
+ * 
+ * Validates user input, initializes the simulation table, and starts the
+ * simulation. Joins all created threads before freeing resources.
+ * 
+ * @param ac Argument count.
+ * @param av Argument vector.
+ * 
+ * @return 0 on successful execution, 1 if any error occurs.
+ */
 int	main(int ac, char **av)
 {
 	t_table	*table;

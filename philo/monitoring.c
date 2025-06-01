@@ -6,12 +6,22 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/05/31 14:10:37 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/01 12:14:22 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/**
+ * @brief Checks if the simulation should stop.
+ * 
+ * The simulation should stop if any philosopher has died (i.e. has not eaten
+ * in time) or if all philosophers have eaten the required number of meals.
+ * 
+ * @param t Pointer to the table structure.
+ * 
+ * @return 1 if the simulation should stop, 0 otherwise.
+ */
 int	should_simulation_stop(t_table *t)
 {
 	int	i;
@@ -40,9 +50,11 @@ int	should_simulation_stop(t_table *t)
 }
 
 /**
- * @brief Checks if the simulation is still running.
+ * @brief Thread-safe check to determine if the simulation is still running.
  * 
- * @return 1 if it is running, 0 otherwise.
+ * @param table Pointer to the table structure.
+ * 
+ * @return 1 if simulation is running, 0 otherwise.
  */
 int	is_simulation_running(t_table *table)
 {
@@ -54,6 +66,15 @@ int	is_simulation_running(t_table *table)
 	return (ret);
 }
 
+/**
+ * @brief Prints the current status of a philosopher with emoji and color.
+ * 
+ * Skips printing if the simulation has ended and the status is not `DECEASED`.
+ * Ensures thread-safe printing by using a dedicated mutex.
+ * 
+ * @param philo Pointer to the philosopher whose status is to be printed.
+ * @param status The current status to be displayed.
+ */
 void	print_status(t_philo *philo, t_status status)
 {
 	const char	*labels[5] = {

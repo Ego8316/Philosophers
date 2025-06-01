@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:31:01 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 17:07:45 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/01 12:07:02 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,22 @@ int	is_valid_integer(char *s)
 	return (1);
 }
 
+/**
+ * @brief Valideates command-line arguments for the simulation.
+ * 
+ * Performs the following checks on each argument:
+ * @brief - Not empty.
+ * @brief - Represents a valid integer.
+ * @brief - Is positive (greater than 0).
+ * 
+ * Also ensures the number of philosophers do not exceed `MAX_PHILO` and
+ * prints on the standard error the appropriate error message.
+ * 
+ * @param ac Argument count.
+ * @param av Argument vector.
+ * 
+ * @return 1 if all inputs are valid, 0 otherwise.
+ */
 int	is_valid_input(int ac, char **av)
 {
 	int	i;
