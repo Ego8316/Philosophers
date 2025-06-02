@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/06/01 12:14:22 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/02 12:41:44 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ void	print_status(t_philo *philo, t_status status)
 		"died ☠️",
 		"has taken a fork 🍴",
 		"is eating 🍝",
-		"is thinking 🤔",
-		"is sleeping 😴"
+		"is sleeping 😴",
+		"is thinking 🤔"
 	};
 	const char	*colors[5] = {
 		COLOR_R,
