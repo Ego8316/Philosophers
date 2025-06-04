@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 13:06:38 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 22:56:35 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 00:46:59 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	open_global_semaphores(t_table *t)
  * @param prefix Semaphore prefix.
  * @param id Philosopher's ID.
  * 
- * @warning Assumes `last_meal_sem_name` is pre-allocated with at least
+ * @warning Assumes `sem_name` is pre-allocated with at least
  * `BUFFER_SIZE` bytes.
  */
 void	get_unique_sem_name(char *sem_name, char *prefix, int id)
@@ -130,10 +130,8 @@ void	get_unique_sem_name(char *sem_name, char *prefix, int id)
 int	init_local_semaphore(t_philo *p)
 {
 	sem_unlink(p->last_meal_sem_name);
-	sem_unlink(p->sim_running_sem_name);
 	p->last_meal_sem = sem_open(p->last_meal_sem_name, O_CREAT, 0644, 1);
-	p->sim_running_sem = sem_open(p->sim_running_sem_name, O_CREAT, 0644, 1);
-	if (p->last_meal_sem == SEM_FAILED || p->sim_running_sem == SEM_FAILED)
+	if (p->last_meal_sem == SEM_FAILED)
 		return (errmsg_null(SEM_OPEN_ERR), 0);
 	return (1);
 }

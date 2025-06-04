@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 20:14:14 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 22:57:03 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 00:05:53 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,17 @@ void	*free_array(void **arr, int size)
  */
 void	*free_table(t_table *t)
 {
+	int	i;
+
 	if (t)
 	{
 		if (t->philos)
+		{
+			i = -1;
+			while (++i < t->n)
+				sem_unlink(t->philos[i]->last_meal_sem_name);
 			free_array((void **)t->philos, t->n);
+		}
 		if (t->forks_sem != SEM_FAILED)
 			sem_close(t->forks_sem);
 		if (t->print_sem != SEM_FAILED)
@@ -95,10 +102,7 @@ void	clean_exit_child(t_philo *p, int status)
 {
 	if (p->last_meal_sem != SEM_FAILED)
 		sem_close(p->last_meal_sem);
-	if (p->sim_running_sem != SEM_FAILED)
-		sem_close(p->sim_running_sem);
 	sem_unlink(p->last_meal_sem_name);
-	sem_unlink(p->sim_running_sem_name);
 	free_table(p->table);
 	exit(status);
 }

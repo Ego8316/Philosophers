@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 22:58:08 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 00:43:52 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,9 @@ typedef struct s_philo
 	pid_t			pid;
 	time_t			last_meal_time;
 	char			last_meal_sem_name[BUFFER_SIZE];
-	char			sim_running_sem_name[BUFFER_SIZE];
 	int				meals_eaten;
 	sem_t			*last_meal_sem;
-	sem_t			*sim_running_sem;
 	pthread_t		hunger;
-	pthread_t		observer;
 	struct s_table	*table;
 }	t_philo;
 
@@ -86,6 +83,7 @@ typedef struct s_table
 	sem_t			*death_sem;
 	time_t			start_time;
 	pthread_t		watchdog;
+	pthread_t		reaper;
 }	t_table;
 
 // Table
@@ -96,9 +94,8 @@ t_table		*get_table(int ac, char **av);
 void		philosopher(t_philo *p);
 
 // Monitoring
-int			is_simulation_running(t_philo *p);
 void		*watchdog_routine(void *d);
-void		*observer_routine(void *d);
+void		*reaper_routine(void *d);
 void		*hunger_routine(void *d);
 void		print_status(t_philo *philo, t_status status);
 

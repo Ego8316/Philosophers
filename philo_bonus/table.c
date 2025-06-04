@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:46:00 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 23:01:13 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 23:48:56 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static t_philo	**get_philos(t_table *table)
 		philos[i]->id = i + 1;
 		philos[i]->table = table;
 		get_unique_sem_name(philos[i]->last_meal_sem_name, LM_PREFIX, i + 1);
-		get_unique_sem_name(philos[i]->sim_running_sem_name, SR_PREFIX, i + 1);
 	}
 	return (philos);
 }

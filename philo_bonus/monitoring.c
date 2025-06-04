@@ -6,21 +6,11 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 23:04:53 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 00:49:33 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int	is_simulation_running(t_philo *p)
-{
-	int	running;
-
-	sem_wait(p->sim_running_sem);
-	running = p->table->sim_running;
-	sem_post(p->sim_running_sem);
-	return (running);
-}
 
 /**
  * @brief Monitor routine that waits for all philosophers to finish eating.
@@ -44,8 +34,7 @@ void	*watchdog_routine(void *d)
 	i = -1;
 	while (++i < table->n)
 		sem_wait(table->meals_sem);
-	while (i--)
-		sem_post(table->death_sem);
+	sem_post(table->death_sem);
 	return (NULL);
 }
 
@@ -56,7 +45,7 @@ void	*watchdog_routine(void *d)
  * checks whether the philosopher has exceeded the `time_to_die` threshold
  * since their last meal. Access to `last_meal_time` is synchronized via
  * `last_meal_sem`. If starvation is detected, prints a death message and
- * broadcasts to all children using `death_sem` to end the simulation.
+ * posts `death_sem` to end the simulation.
  * 
  * This loop runs with a very short sleep to ensure timely detection.
  * 
@@ -68,11 +57,10 @@ void	*hunger_routine(void *d)
 {
 	t_philo	*p;
 	time_t	last_meal_time;
-	int		i;
 
 	p = (t_philo *)d;
 	delay_start(p->table->start_time);
-	while (is_simulation_running(p))
+	while (1)
 	{
 		sem_wait(p->last_meal_sem);
 		last_meal_time = p->last_meal_time;
@@ -80,12 +68,8 @@ void	*hunger_routine(void *d)
 		if (get_time_in_ms() - last_meal_time > p->table->time_to_die)
 		{
 			print_status(p, DECEASED);
-			i = -1;
-			sem_wait(p->sim_running_sem);
-			p->table->sim_running = 0;
-			sem_post(p->sim_running_sem);
-			while (++i < p->table->n)
-				sem_post(p->table->death_sem);
+			sem_post(p->table->death_sem);
+			break ;
 		}
 		ft_usleep(1);
 	}
@@ -98,19 +82,17 @@ void	*hunger_routine(void *d)
  * Runs in each philosopher process and waits on the shared `death_sem`. When
  * signaled, it performs cleanup and exits the process gracefully.
  * 
- * @param d A void pointer to the philosopher structure.
+ * @param d A void pointer to the table structure.
  * @return Always returns NULL.
  */
-void	*observer_routine(void *d)
+void	*reaper_routine(void *d)
 {
-	t_philo	*p;
+	t_table	*t;
 
-	p = (t_philo *)d;
-	delay_start(p->table->start_time);
-	sem_wait(p->table->death_sem);
-	sem_wait(p->sim_running_sem);
-	p->table->sim_running = 0;
-	sem_post(p->sim_running_sem);
+	t = (t_table *)d;
+	delay_start(t->start_time);
+	sem_wait(t->death_sem);
+	kill_philos(t->philos, t->n);
 	return (NULL);
 }
 

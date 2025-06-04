@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 23:05:43 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 00:42:31 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,14 @@ int	start_simulation(t_table *table)
 		if (table->philos[i]->pid == 0)
 			philosopher(table->philos[i]);
 	}
+	if (pthread_create(&table->reaper, 0, &reaper_routine, table) != 0)
+		return (errmsg_null(THREAD_ERR), kill_philos(table->philos, i));
 	if (table->n > 1 && table->meals_required > 0
 		&& pthread_create(&table->watchdog, 0, &watchdog_routine, table) != 0)
+	{
+		pthread_join(table->reaper, 0);
 		return (errmsg_null(THREAD_ERR), kill_philos(table->philos, i));
+	}
 	return (1);
 }
 
@@ -85,12 +90,13 @@ int	end_simulation(t_table *table)
 	i = -1;
 	while (++i < table->n)
 	{
-		if (wait_and_get_exit_code(table->philos[i]->pid) != 0)
+		if (wait_and_get_exit_code(table->philos[i]->pid) == 1)
 		{
 			kill_philos(table->philos, table->n);
 			status = 1;
 		}
 	}
+	pthread_join(table->reaper, 0);
 	if (table->n > 1 && table->meals_required > 0)
 		pthread_join(table->watchdog, 0);
 	return (status);
