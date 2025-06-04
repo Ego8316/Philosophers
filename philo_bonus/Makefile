@@ -6,7 +6,7 @@
 #    By: ego <ego@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/25 18:54:06 by ego               #+#    #+#              #
-#    Updated: 2025/06/04 19:25:17 by ego              ###   ########.fr        #
+#    Updated: 2025/06/04 21:07:43 by ego              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,6 @@ INCL		=	-I $(IDIR)
 CC			=	cc
 RM			=	rm -rf
 CFLAGS		=	-Wall -Wextra -Werror -pthread
-# CFLAGS		+=	-fsanitize=thread -g -fno-omit-frame-pointer
 
 NAME		=	philo_bonus
 

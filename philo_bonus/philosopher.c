@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 20:06:48 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 21:09:29 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
  */
 void	solitary_philosopher_routine(t_philo *p)
 {
-	printf("hey\n");
 	delay_start(p->table->start_time);
 	print_status(p, FORK);
 	ft_usleep(p->table->time_to_die);
@@ -46,12 +45,10 @@ void	solitary_philosopher_routine(t_philo *p)
  * 
  * @param p Pointer to the philosopher.
  * 
- * @return Always returns NULL.
- * 
  * @note This function should be called within a thread created for a
  * philosopher.
  */
-static void	*eat_sleep_routine(t_philo *p)
+static void	eat_sleep_routine(t_philo *p)
 {
 	sem_wait(p->table->forks_sem);
 	print_status(p, FORK);
@@ -68,7 +65,6 @@ static void	*eat_sleep_routine(t_philo *p)
 		sem_post(p->table->meals_sem);
 	print_status(p, SLEEPING);
 	ft_usleep(p->table->time_to_sleep);
-	return (NULL);
 }
 
 /**
@@ -79,12 +75,10 @@ static void	*eat_sleep_routine(t_philo *p)
  * 
  * @param p Pointer to the philosopher structure.
  * 
- * @return Always returns NULL.
- * 
  * @note This function should be called within a thread created for a
  * philosopher.
  */
-static void	*think_routine(t_philo *p)
+static void	think_routine(t_philo *p)
 {
 	time_t	time_since_last_meal;
 	time_t	time_to_think;
@@ -100,35 +94,10 @@ static void	*think_routine(t_philo *p)
 	if (time_to_think > 200)
 		time_to_think = 200;
 	ft_usleep(time_to_think);
-	return (NULL);
 }
 
-/**
- * @brief Main routine executed by each philosopher process.
- * 
- * Defines the philosopher's lifecycle.
- * 
- * @brief 1 - Handles the single philosopher edge case.
- * @brief 2 - Opens shared semaphores and initializes local ones.
- * @brief 3 - Starts the per-philosopher starvation detector and exit observer.
- * @brief 4 - Waits for the synchronized simulation start time.
- * @brief 5 - Repeats the cycle eat -> sleep -> think.
- * 
- * Philosophers with odd IDs start by thinking to help prevent deadlock.
- * 
- * @param d A void pointer to the philosopher structure.
- * 
- * @return Always returns NULL.
- */
-void	*philo_routine(t_philo *p)
+static void	philo_routine(t_philo *p)
 {
-	if (p->table->n == 1)
-		solitary_philosopher_routine(p);
-	if (!open_global_semaphores(p->table) || !init_local_semaphore(p)
-		|| pthread_create(&p->hunger, 0, hunger_routine, p) != 0)
-		clean_exit_child(p, 1);
-	if (pthread_create(&p->watcher, 0, observer_routine, p) != 0)
-		clean_exit_child(p, 1);
 	sem_wait(p->last_meal_sem);
 	p->last_meal_time = p->table->start_time;
 	sem_post(p->last_meal_sem);
@@ -140,7 +109,41 @@ void	*philo_routine(t_philo *p)
 		eat_sleep_routine(p);
 		think_routine(p);
 	}
-	pthread_join(p->hunger, 0);
-	pthread_join(p->watcher, 0);
-	return (NULL);
+}
+
+/**
+ * @brief Main routine executed by each philosopher process.
+ * 
+ * Defines the philosopher's lifecycle and sets up the required threads for
+ * starvation monitoring and graceful exit handling.
+ * 
+ * @brief 1 - Handles the single philosopher edge case.
+ * @brief 2 - Opens shared semaphores and initializes local ones.
+ * @brief 3 - Starts the per-philosopher starvation detector and exit observer.
+ * @brief 4 - Repeats the cycle eat -> sleep -> think.
+ * 
+ * Philosophers with odd IDs start by thinking to help prevent deadlock.
+ * 
+ * @param d A void pointer to the philosopher structure.
+ * 
+ * @return Always returns NULL.
+ */
+void	philosopher(t_philo *p)
+{
+	if (p->table->n == 1)
+	{
+		solitary_philosopher_routine(p);
+		return ;
+	}
+	if (!open_global_semaphores(p->table) || !init_local_semaphore(p)
+		|| pthread_create(&p->hunger, 0, hunger_routine, p) != 0)
+		clean_exit_child(p, 1);
+	if (pthread_create(&p->observer, 0, observer_routine, p) != 0)
+	{
+		pthread_join(p->hunger, 0);
+		clean_exit_child(p, 1);
+	}
+	pthread_detach(p->hunger);
+	pthread_detach(p->observer);
+	philo_routine(p);
 }

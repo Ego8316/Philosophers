@@ -6,11 +6,41 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 19:45:26 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 20:44:19 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+/**
+ * @brief Waits for a process to terminate and retrieves its exit code.
+ * 
+ * Checks if the process was exited normally or was terminated by a signal and
+ * returns the corresponding exit code. `wpid == pid` is a safeguard to ensure
+ * the child process we just waited for actually is the one expected.
+ * 
+ * @param pid PID of the child process to wait for.
+ * 
+ * @return Exit code of the process.
+ */
+int	wait_and_get_exit_code(pid_t pid)
+{
+	int		status;
+	pid_t	wpid;
+
+	while (1)
+	{
+		wpid = waitpid(pid, &status, 0);
+		if (wpid == -1)
+			continue ;
+		break ;
+	}
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (status);
+}
 
 /**
  * @brief Launches the philosopher simulation.
@@ -31,23 +61,38 @@ int	start_simulation(t_table *table)
 
 	table->start_time = get_time_in_ms() + 50 * table->n;
 	i = -1;
-	printf("debug: %li %i\n", table->start_time, table->n);
 	while (++i < table->n)
 	{
 		table->philos[i]->pid = fork();
 		if (table->philos[i]->pid == -1)
 			return (errmsg_null(FORK_ERR), kill_philos(table->philos, i));
 		if (table->philos[i]->pid == 0)
-		{
-			printf("child created %p\n", table->philos[i]->table);
-			philo_routine(table->philos[i]);
-		}
+			philosopher(table->philos[i]);
 	}
 	if (table->n > 1 && table->meals_required > 0
 		&& pthread_create(&table->watchdog, 0, &watchdog_routine, table) != 0)
 		return (errmsg_null(THREAD_ERR), kill_philos(table->philos, i));
-	waitpid(-1, NULL, 0);
 	return (1);
+}
+
+int	end_simulation(t_table *table)
+{
+	int	status;
+	int	i;
+
+	status = 0;
+	i = -1;
+	while (++i < table->n)
+	{
+		if (wait_and_get_exit_code(table->philos[i]->pid) != 0)
+		{
+			kill_philos(table->philos, table->n);
+			status = 1;
+		}
+	}
+	if (table->n > 1 && table->meals_required > 0)
+		pthread_join(table->watchdog, 0);
+	return (status);
 }
 
 /**
@@ -64,6 +109,7 @@ int	start_simulation(t_table *table)
 int	main(int ac, char **av)
 {
 	t_table	*table;
+	int		status;
 
 	if (ac < 5 || ac > 6)
 		return (put_help_message(ac));
@@ -72,14 +118,9 @@ int	main(int ac, char **av)
 	table = get_table(ac, av);
 	if (!table)
 		return (errmsg("Error building the table\n", 0, 0, 1));
-	start_simulation(table);
-	// if (!start_simulation(table))
-	// {
-	// 	free_table(table);
-	// 	return (errmsg("Error starting the simulation\n", 0, 0, 1));
-	// }
-	if (table->n > 1 && table->meals_required > 0)
-		pthread_join(table->watchdog, 0);
+	if (!start_simulation(table))
+		return (errmsg("Error starting the simulation\n", 0, 0, 1));
+	status = end_simulation(table);
 	free_table(table);
-	return (0);
+	return (status);
 }

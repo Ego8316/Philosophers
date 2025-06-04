@@ -6,11 +6,22 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 13:06:38 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 15:03:52 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 21:13:49 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+/**
+ * @brief Unlinks all global semaphores.
+ */
+void	unlink_global_semaphores(void)
+{
+	sem_unlink(FORKS_SEM_NAME);
+	sem_unlink(PRINT_SEM_NAME);
+	sem_unlink(DEATH_SEM_NAME);
+	sem_unlink(MEALS_SEM_NAME);
+}
 
 /**
  * @brief Initializes the global named semaphores for the simulation.
@@ -36,14 +47,10 @@
  */
 int	init_global_semaphores(t_table *t)
 {
-	sem_unlink(FORKS_SEM_NAME);
-	sem_unlink(PRINT_SEM_NAME);
-	sem_unlink(DEATH_SEM_NAME);
-	if (t->meals_required > 0)
-		sem_unlink(MEALS_SEM_NAME);
+	unlink_global_semaphores();
 	t->forks_sem = sem_open(FORKS_SEM_NAME, O_CREAT | O_EXCL, 0644, t->n);
 	t->print_sem = sem_open(PRINT_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
-	t->death_sem = sem_open(DEATH_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
+	t->death_sem = sem_open(DEATH_SEM_NAME, O_CREAT | O_EXCL, 0644, 0);
 	if (t->meals_required > 0)
 		t->meals_sem = sem_open(MEALS_SEM_NAME, O_CREAT | O_EXCL, 0644, 0);
 	if (t->forks_sem == SEM_FAILED || t->print_sem == SEM_FAILED

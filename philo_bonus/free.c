@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 20:14:14 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 19:35:03 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 21:14:39 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ void	*free_array(void **arr, int size)
 }
 
 /**
- * @brief Frees all there is to free in the table structure. Also destroys all
- * initiated mutexes.
+ * @brief Frees all there is to free in the table structure. Also closes all
+ * opened semaphores and unlinks them.
  * 
  * @param t Pointer to the table structure.
  * 
@@ -78,7 +78,24 @@ void	*free_table(t_table *t)
 			sem_close(t->death_sem);
 		if (t->meals_required > 0 && t->meals_sem != SEM_FAILED)
 			sem_close(t->meals_sem);
+		unlink_global_semaphores();
 		free(t);
 	}
 	return (NULL);
+}
+
+/**
+ * @brief Closes the local semaphore and unlinks it, then frees the table
+ * structure and exits with provided exit code.
+ * 
+ * @param p Pointer to the philosopher.
+ * @param status Exit code.
+ */
+void	clean_exit_child(t_philo *p, int status)
+{
+	if (p->last_meal_sem != SEM_FAILED)
+		sem_close(p->last_meal_sem);
+	sem_unlink(p->last_meal_sem_name);
+	free_table(p->table);
+	exit(status);
 }
