@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 14:16:17 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 14:28:32 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,7 @@ void	*reaper_routine(void *d)
 	delay_start(table->start_time);
 	while (1)
 	{
-		if (should_simulation_stop(table))
-		{
-			table->sim_running = 0;
-			return (NULL);
-		}
+		table->sim_running = 0;
 		ft_usleep(1);
 	}
 	return (NULL);

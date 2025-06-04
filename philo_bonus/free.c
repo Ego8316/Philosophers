@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 20:14:14 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 13:27:20 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 14:31:19 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	*free_table(t_table *t)
 	if (t)
 	{
 		if (t->philos)
-			free_array(t->philos, t->n);
+			free_array((void **)t->philos, t->n);
 		if (t->forks_sem != SEM_FAILED)
 			sem_close(t->forks_sem);
 		if (t->print_sem != SEM_FAILED)

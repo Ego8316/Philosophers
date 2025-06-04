@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/01 12:30:56 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 14:27:51 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,24 +25,24 @@
  * 
  * @return 1 if all threads are successfully created, 0 otherwise.
  */
-int	start_simulation(t_table *table)
-{
-	int	i;
+// int	start_simulation(t_table *table)
+// {
+// 	int	i;
 
-	table->sim_running = 1;
-	table->start_time = get_time_in_ms() + 50 * table->n;
-	i = -1;
-	while (++i < table->n)
-	{
-		if (pthread_create(&table->philos[i]->thread, 0, &philo_routine,
-				table->philos[i]) != 0)
-			return (errmsg_null(THREAD_ERR), join_philos(table->philos, i));
-	}
-	if (table->n > 1
-		&& pthread_create(&table->reaper, 0, &reaper_routine, table) != 0)
-		return (errmsg_null(THREAD_ERR), join_philos(table->philos, i));
-	return (1);
-}
+// 	table->sim_running = 1;
+// 	table->start_time = get_time_in_ms() + 50 * table->n;
+// 	i = -1;
+// 	while (++i < table->n)
+// 	{
+// 		if (pthread_create(&table->philos[i]->thread, 0, &philo_routine,
+// 				table->philos[i]) != 0)
+// 			return (errmsg_null(THREAD_ERR), join_philos(table->philos, i));
+// 	}
+// 	if (table->n > 1
+// 		&& pthread_create(&table->reaper, 0, &reaper_routine, table) != 0)
+// 		return (errmsg_null(THREAD_ERR), join_philos(table->philos, i));
+// 	return (1);
+// }
 
 /**
  * @brief Entry point of the philosopher simulation.
@@ -66,14 +66,13 @@ int	main(int ac, char **av)
 	table = get_table(ac, av);
 	if (!table)
 		return (errmsg("Error building the table\n", 0, 0, 1));
-	if (!start_simulation(table))
-	{
-		free_table(table);
-		return (errmsg("Error starting the simulation\n", 0, 0, 1));
-	}
-	if (table->n > 1)
-		pthread_join(table->reaper, 0);
-	join_philos(table->philos, table->n);
+	// if (!start_simulation(table))
+	// {
+	// 	free_table(table);
+	// 	return (errmsg("Error starting the simulation\n", 0, 0, 1));
+	// }
+	// if (table->n > 1)
+	// 	pthread_join(table->reaper, 0);
 	free_table(table);
 	return (0);
 }
