@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 19:04:59 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 23:41:04 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ void	print_status(t_philo *philo, t_status status)
 	printf("%li\tPhilosopher %i %s%s%s\n",
 		get_time_in_ms() - philo->table->start_time,
 		philo->id, colors[status], labels[status], C_RESET);
-	if (status != DECEASED)
-		pthread_mutex_unlock(&philo->table->print_lock);
+	pthread_mutex_unlock(&philo->table->print_lock);
 	return ;
 }
