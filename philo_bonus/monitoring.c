@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 19:35:22 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 19:54:41 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
  * @brief Monitor routine that waits for all philosophers to finish eating.
  * 
  * Runs as a dedicated thread in the main process. It blocks on the `meals_sem`
- * sempahore `n` times - once per philosopher - effectively waiting until all
- * philosophers have reached their required meal count. Once done, it kills
- * all philosopher processes to actually end the simulation.
+ * semaphore `n` times - once per philosopher - effectively waiting until all
+ * philosophers have reached their required meal count. Once done, posts
+ * `death_sem` `n` timesto allow child processes to exit gracefully.
  * 
  * @param d A void pointer to the table structure.
  * 
@@ -36,17 +36,17 @@ void	*watchdog_routine(void *d)
 		sem_wait(table->meals_sem);
 	while (i--)
 		sem_post(table->death_sem);
-	kill_philos(table->philos, table->n);
 	return (NULL);
 }
 
 /**
  * @brief Per-philosopher monitoring thread that detects death by starvation.
  * 
- * Runs inside each philosopher process as a dedicated thread. Continuously
- * checks the philosopher's `last_meal_time` under mutual exclusion via
- * `last_meal_sem` semaphore. If the elapsed time since last meal exceeds
- * `time_to_die`, prints the death message 
+ * Runs inside each philosopher process as a dedicated thread. Repeatedly
+ * checks whether the philosopher has exceeded the `time_to_die` threshold
+ * since their last meal. Access to `last_meal_time` is synchronized via
+ * `last_meal_sem`. If starvation is detected, prints a death message and
+ * broadcasts to all children using `death_sem` to end the simulation.
  * 
  * This loop runs with a very short sleep to ensure timely detection.
  * 
@@ -79,6 +79,15 @@ void	*hunger_routine(void *d)
 	return (NULL);
 }
 
+/**
+ * @brief Exit observer thread for each philosopher.
+ * 
+ * Runs in each philosopher process and waits on the shared `death_sem`. When
+ * signaled, it performs cleanup and exits the process gracefully.
+ * 
+ * @param d A void pointer to the philosopher structure.
+ * @return Always returns NULL.
+ */
 void	*observer_routine(void *d)
 {
 	t_philo	*p;

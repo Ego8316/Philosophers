@@ -6,12 +6,24 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 19:44:48 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 20:06:48 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/**
+ * @brief Special routine for a solitary philosopher.
+ * 
+ * A single philosopher cannot eat as there is only one fork available. In that
+ * grim scenario, the philosopher picks up the only fork and waits for its
+ * tragic death.
+ * 
+ * @param p Pointer to the lonely philosopher.
+ * 
+ * @note This function should be called within a thread created for a
+ * philosopher.
+ */
 void	solitary_philosopher_routine(t_philo *p)
 {
 	printf("hey\n");
@@ -25,11 +37,12 @@ void	solitary_philosopher_routine(t_philo *p)
 /**
  * @brief Philosopher's routine for eating and sleeping.
  * 
- * @brief 1 - Pick up their forks (left and right) using `sem_wait`.
- * @brief 2 - Print their actions to the console (taking forks, eating, and
- * sleeping).
- * @brief 3 - Update their last meal timestamp and increment their counter.
- * @brief 4 - Sleep for the configured amount of time after eating.
+ * @brief 1 - Waits on the `forks_sem` semaphore to pick up both forks.
+ * @brief 2 - Updates `last_meal_time` and prints status message.
+ * @brief 3 - Eats for the configured duration.
+ * @brief 4 - Releases both forks.
+ * @brief 5 - If meal limit is specified and reached, posts to `meals_sem`.
+ * @brief 6 - Sleeps for the configured duration.
  * 
  * @param p Pointer to the philosopher.
  * 
@@ -67,6 +80,9 @@ static void	*eat_sleep_routine(t_philo *p)
  * @param p Pointer to the philosopher structure.
  * 
  * @return Always returns NULL.
+ * 
+ * @note This function should be called within a thread created for a
+ * philosopher.
  */
 static void	*think_routine(t_philo *p)
 {
@@ -88,16 +104,17 @@ static void	*think_routine(t_philo *p)
 }
 
 /**
- * @brief Main routine executed by each philosopher thread.
+ * @brief Main routine executed by each philosopher process.
  * 
- * This function defines the behavior of a philosopher throughout the
- * simulation. It performs the following steps:
- * @brief 1 - Initializes the philosopher's `last_meal_time` to the table's
- * start time.
- * @brief 2 - Waits until the synchronized simulation start time using
- * `delay_start`.
- * @brief 3 - Continuously loops through eating, sleeping and thinking as long
- * as the simulation is running.
+ * Defines the philosopher's lifecycle.
+ * 
+ * @brief 1 - Handles the single philosopher edge case.
+ * @brief 2 - Opens shared semaphores and initializes local ones.
+ * @brief 3 - Starts the per-philosopher starvation detector and exit observer.
+ * @brief 4 - Waits for the synchronized simulation start time.
+ * @brief 5 - Repeats the cycle eat -> sleep -> think.
+ * 
+ * Philosophers with odd IDs start by thinking to help prevent deadlock.
  * 
  * @param d A void pointer to the philosopher structure.
  * 
@@ -105,14 +122,12 @@ static void	*think_routine(t_philo *p)
  */
 void	*philo_routine(t_philo *p)
 {
-	printf("ALLO %p\n", p->table);
-	printf("yo %i\n", p->table->n);
 	if (p->table->n == 1)
 		solitary_philosopher_routine(p);
 	if (!open_global_semaphores(p->table) || !init_local_semaphore(p)
 		|| pthread_create(&p->hunger, 0, hunger_routine, p) != 0)
 		clean_exit_child(p, 1);
-	if (pthread_create(&p->watcher, 0, observer_routine, p))
+	if (pthread_create(&p->watcher, 0, observer_routine, p) != 0)
 		clean_exit_child(p, 1);
 	sem_wait(p->last_meal_sem);
 	p->last_meal_time = p->table->start_time;
@@ -126,5 +141,6 @@ void	*philo_routine(t_philo *p)
 		think_routine(p);
 	}
 	pthread_join(p->hunger, 0);
+	pthread_join(p->watcher, 0);
 	return (NULL);
 }
