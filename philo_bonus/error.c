@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:14:21 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 15:09:34 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 16:09:23 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	put_help_message(int ac)
 {
 	int	i;
 
-	ft_putstr_fd("Usage:\t./philo ", STDERR_FILENO);
+	ft_putstr_fd("Usage:\t./philo_bonus ", STDERR_FILENO);
 	i = -1;
 	while (++i < 5)
 	{

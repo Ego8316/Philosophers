@@ -6,7 +6,7 @@
 #    By: ego <ego@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/25 18:54:06 by ego               #+#    #+#              #
-#    Updated: 2025/06/04 14:28:46 by ego              ###   ########.fr        #
+#    Updated: 2025/06/04 19:25:17 by ego              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,8 @@ SRCS		=	main.c			\
 				error.c			\
 				free.c			\
 				monitoring.c	\
-				routines.c		\
-				semaphore.c	\
+				philosopher.c	\
+				semaphore.c		\
 				table.c			\
 				time.c			\
 				utils.c

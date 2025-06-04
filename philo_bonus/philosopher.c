@@ -1,77 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routines.c                                         :+:      :+:    :+:   */
+/*   philosopher.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 15:18:38 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 19:44:48 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/**
- * @brief Monitor routine that checks if the simulation should end.
- * 
- * This function runs in a separate thread and continuously checks whether a
- * philosopher has died or all philosophers have eaten enough. If either
- * condition is met, sets the shared `sim_running` flag to 0 to terminate the
- * simulation.
- * 
- * @param d A void pointer to the table structure.
- * 
- * @return Always returns NULL.
- */
-void	*reaper_routine(void *d)
+void	solitary_philosopher_routine(t_philo *p)
 {
-	t_table	*table;
-	int		i;
-
-	table = (t_table *)d;
-	delay_start(table->start_time);
-	i = -1;
-	while (++i)
-		sem_wait(table->meals_sem);
-	kill_philos(table->philos, table->n);
-	return (NULL);
-}
-
-static void	*tiny_reaper(void *d)
-{
-	t_philo	*p;
-	time_t	last_meal_time;
-
-	p = (t_philo *)d;
+	printf("hey\n");
 	delay_start(p->table->start_time);
-	while (1)
-	{
-		sem_wait(p->last_meal_sem);
-		last_meal_time = p->last_meal_time;
-		sem_post(p->last_meal_sem);
-		if (get_time_in_ms() - last_meal_time > p->table->time_to_die)
-		{
-			print_status(p, DECEASED);
-			sem_post(p->table->death_sem);
-		}
-		ft_usleep(1);
-	}
-	return (NULL);
+	print_status(p, FORK);
+	ft_usleep(p->table->time_to_die);
+	print_status(p, DECEASED);
+	clean_exit_child(p, 0);
 }
 
 /**
  * @brief Philosopher's routine for eating and sleeping.
  * 
- * @brief 1 - Pick up their forks (left and right) using mutexes.
+ * @brief 1 - Pick up their forks (left and right) using `sem_wait`.
  * @brief 2 - Print their actions to the console (taking forks, eating, and
  * sleeping).
  * @brief 3 - Update their last meal timestamp and increment their counter.
  * @brief 4 - Sleep for the configured amount of time after eating.
- * 
- * Fork acquisition follows the philosopher's assigned left and right fork
- * indices. Locks are released right after eating. The meal count is only
- * updated if the simulation is still running.
  * 
  * @param p Pointer to the philosopher.
  * 
@@ -141,36 +99,32 @@ static void	*think_routine(t_philo *p)
  * @brief 3 - Continuously loops through eating, sleeping and thinking as long
  * as the simulation is running.
  * 
- * The loop condition is controlled by the shared simulation running flag,
- * which is mutex-protected.
- * 
  * @param d A void pointer to the philosopher structure.
  * 
  * @return Always returns NULL.
  */
-void	*philo_routine(void *d)
+void	*philo_routine(t_philo *p)
 {
-	t_philo	*p;
-
-	p = (t_philo *)d;
+	printf("ALLO %p\n", p->table);
+	printf("yo %i\n", p->table->n);
+	if (p->table->n == 1)
+		solitary_philosopher_routine(p);
 	if (!open_global_semaphores(p->table) || !init_local_semaphore(p)
-		|| !pthread_create(&p->reaper, 0, tiny_reaper, 0))
-		clean_exit_child(p, 2);
+		|| pthread_create(&p->hunger, 0, hunger_routine, p) != 0)
+		clean_exit_child(p, 1);
+	if (pthread_create(&p->watcher, 0, observer_routine, p))
+		clean_exit_child(p, 1);
 	sem_wait(p->last_meal_sem);
 	p->last_meal_time = p->table->start_time;
 	sem_post(p->last_meal_sem);
 	delay_start(p->table->start_time);
-	if (p->table->n == 1)
-	{
-		print_status(p, FORK);
-		ft_usleep(p->table->time_to_die);
-		print_status(p, DECEASED);
-		clean_exit_child(p, 0);
-	}
+	if (p->id % 2)
+		think_routine(p);
 	while (1)
 	{
 		eat_sleep_routine(p);
 		think_routine(p);
 	}
+	pthread_join(p->hunger, 0);
 	return (NULL);
 }

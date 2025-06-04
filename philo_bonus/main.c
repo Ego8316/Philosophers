@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 15:20:13 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 19:45:26 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,24 @@ int	start_simulation(t_table *table)
 {
 	int	i;
 
-	table->sim_running = 1;
 	table->start_time = get_time_in_ms() + 50 * table->n;
 	i = -1;
+	printf("debug: %li %i\n", table->start_time, table->n);
 	while (++i < table->n)
 	{
 		table->philos[i]->pid = fork();
 		if (table->philos[i]->pid == -1)
 			return (errmsg_null(FORK_ERR), kill_philos(table->philos, i));
 		if (table->philos[i]->pid == 0)
-			philo_routine(table);
+		{
+			printf("child created %p\n", table->philos[i]->table);
+			philo_routine(table->philos[i]);
+		}
 	}
-	waitpid(-1, 0, 0);
-	kill(-1, SIGKILL);
-	// if (table->n > 1
-	// 	&& pthread_create(&table->reaper, 0, &reaper_routine, table) != 0)
-	// 	return (errmsg_null(THREAD_ERR), kill_philos(table->philos, i));
+	if (table->n > 1 && table->meals_required > 0
+		&& pthread_create(&table->watchdog, 0, &watchdog_routine, table) != 0)
+		return (errmsg_null(THREAD_ERR), kill_philos(table->philos, i));
+	waitpid(-1, NULL, 0);
 	return (1);
 }
 
@@ -76,8 +78,8 @@ int	main(int ac, char **av)
 	// 	free_table(table);
 	// 	return (errmsg("Error starting the simulation\n", 0, 0, 1));
 	// }
-	// if (table->n > 1)
-	// 	pthread_join(table->reaper, 0);
+	if (table->n > 1 && table->meals_required > 0)
+		pthread_join(table->watchdog, 0);
 	free_table(table);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 15:15:36 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 19:32:19 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ typedef struct s_philo
 	char			last_meal_sem_name[BUFFER_SIZE];
 	int				meals_eaten;
 	sem_t			*last_meal_sem;
-	pthread_t		reaper;
+	pthread_t		watcher;
+	pthread_t		hunger;
 	struct s_table	*table;
 }	t_philo;
 
@@ -81,7 +82,7 @@ typedef struct s_table
 	sem_t			*meals_sem;
 	sem_t			*death_sem;
 	time_t			start_time;
-	pthread_t		reaper;
+	pthread_t		watchdog;
 }	t_table;
 
 // Table
@@ -89,8 +90,10 @@ typedef struct s_table
 t_table		*get_table(int ac, char **av);
 
 // Routines
-void		*philo_routine(void *d);
-void		*reaper_routine(void *d);
+void		*philo_routine(t_philo *p);
+void		*watchdog_routine(void *d);
+void		*observer_routine(void *d);
+void		*hunger_routine(void *d);
 
 // Monitoring
 void		print_status(t_philo *philo, t_status status);
