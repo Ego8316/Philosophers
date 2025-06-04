@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 14:12:17 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 14:17:55 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,20 +91,21 @@ void		*philo_routine(void *d);
 void		*reaper_routine(void *d);
 
 // Monitoring
-int			should_simulation_stop(t_table *table);
-int			is_simulation_running(t_table *table);
 void		print_status(t_philo *philo, t_status status);
+
+// Semaphores
+int		init_global_semaphores(t_table *t);
+int		open_global_semaphores(t_table *t);
+void	get_last_meal_sem_name(char *last_meal_sem_name, int id);
 
 // Time
 time_t		get_time_in_ms(void);
 void		ft_usleep(time_t wait_time);
 void		delay_start(time_t start_time);
 
-// Free, join and destroy functions
-void		destroy_mutexes(pthread_mutex_t *m, int size);
+// Free and destroy functions
 void		*free_array(void **arr, int size);
 void		*free_philos(t_philo **p, int size);
-int			join_philos(t_philo **p, int size);
 void		*free_table(t_table *t);
 
 // Utilities
