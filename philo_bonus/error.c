@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:14:21 by ego               #+#    #+#             */
-/*   Updated: 2025/05/29 20:07:00 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 15:09:34 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,13 @@ int	put_help_message(int ac)
 		return (errmsg("Not enough arguments.\n", 0, 0, 1));
 	else
 		return (errmsg("Too many arguments.\n", 0, 0, 1));
+}
+
+void	clean_exit_child(t_philo *p, int status)
+{
+	if (p->last_meal_sem != SEM_FAILED)
+		sem_close(p->last_meal_sem);
+	sem_unlink(p->last_meal_sem_name);
+	free_table(p->table);
+	exit(status);
 }

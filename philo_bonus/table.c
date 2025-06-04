@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:46:00 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 14:27:24 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 15:15:13 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static t_philo	**get_philos(t_table *table)
 		philos[i]->id = i + 1;
 		philos[i]->table = table;
 		get_last_meal_sem_name(philos[i]->last_meal_sem_name, i + 1);
-		printf("philosopher %i\t%s\n", philos[i]->id, philos[i]->last_meal_sem_name);
 	}
 	return (philos);
 }

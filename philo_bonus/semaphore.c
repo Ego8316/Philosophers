@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 13:06:38 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 14:11:32 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 15:03:52 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,12 @@ int	init_global_semaphores(t_table *t)
 {
 	sem_unlink(FORKS_SEM_NAME);
 	sem_unlink(PRINT_SEM_NAME);
+	sem_unlink(DEATH_SEM_NAME);
 	if (t->meals_required > 0)
 		sem_unlink(MEALS_SEM_NAME);
 	t->forks_sem = sem_open(FORKS_SEM_NAME, O_CREAT | O_EXCL, 0644, t->n);
 	t->print_sem = sem_open(PRINT_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
+	t->death_sem = sem_open(DEATH_SEM_NAME, O_CREAT | O_EXCL, 0644, 1);
 	if (t->meals_required > 0)
 		t->meals_sem = sem_open(MEALS_SEM_NAME, O_CREAT | O_EXCL, 0644, 0);
 	if (t->forks_sem == SEM_FAILED || t->print_sem == SEM_FAILED
@@ -71,10 +73,12 @@ int	open_global_semaphores(t_table *t)
 {
 	t->forks_sem = sem_open(FORKS_SEM_NAME, 0);
 	t->print_sem = sem_open(PRINT_SEM_NAME, 0);
+	t->death_sem = sem_open(DEATH_SEM_NAME, 0);
 	if (t->meals_required > 0)
 		t->meals_sem = sem_open(MEALS_SEM_NAME, 0);
 	if (t->forks_sem == SEM_FAILED || t->print_sem == SEM_FAILED
-		|| (t->meals_required > 0 && t->meals_sem == SEM_FAILED))
+		|| (t->meals_required > 0 && t->meals_sem == SEM_FAILED)
+		|| t->death_sem == SEM_FAILED)
 		return (errmsg_null(SEM_OPEN_ERR), 0);
 	return (1);
 }
@@ -100,4 +104,26 @@ void	get_last_meal_sem_name(char *last_meal_sem_name, int id)
 	last_meal_sem_name[i++] = '0' + id / 10 % 10;
 	last_meal_sem_name[i++] = '0' + id % 10;
 	last_meal_sem_name[i] = 0;
+}
+
+/**
+ * @brief Initializes a local semaphore for each philosopher.
+ * 
+ * Unlinks any existing semaphore with the same name to ensure a clean slate
+ * and then creates a new semaphore associated with the given philosopher.
+ * This semaphore is used to mutex-protect the philosopher's last meal time.
+ * 
+ * If the semaphore fails to open, prints the appropriate error message.
+ * 
+ * @param p Pointer to the philosopher structure containing the semaphore name.
+ * 
+ * @return 1 on success, 0 on failure.
+ */
+int	init_local_semaphore(t_philo *p)
+{
+	sem_unlink(p->last_meal_sem_name);
+	p->last_meal_sem = sem_open(p->last_meal_sem_name, O_CREAT, 0644, 1);
+	if (p->last_meal_sem == SEM_FAILED)
+		return (errmsg_null(SEM_OPEN_ERR), 0);
+	return (1);
 }

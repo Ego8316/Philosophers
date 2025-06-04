@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 14:18:27 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 15:15:36 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # define FORKS_SEM_NAME "/forks_sem"
 # define PRINT_SEM_NAME "/print_sem"
 # define MEALS_SEM_NAME "/meals_sem"
+# define DEATH_SEM_NAME "/death_sem"
 # define LAST_MEAL_SEM_PREFIX "/last_meal_sem_"
 # define BUFFER_SIZE 32
 # define COLOR_R "\033[31m"
@@ -78,6 +79,7 @@ typedef struct s_table
 	sem_t			*print_sem;
 	sem_t			*forks_sem;
 	sem_t			*meals_sem;
+	sem_t			*death_sem;
 	time_t			start_time;
 	pthread_t		reaper;
 }	t_table;
@@ -97,6 +99,7 @@ void		print_status(t_philo *philo, t_status status);
 int			init_global_semaphores(t_table *t);
 int			open_global_semaphores(t_table *t);
 void		get_last_meal_sem_name(char *last_meal_sem_name, int id);
+int			init_local_semaphore(t_philo *p);
 
 // Time
 time_t		get_time_in_ms(void);
@@ -104,9 +107,11 @@ void		ft_usleep(time_t wait_time);
 void		delay_start(time_t start_time);
 
 // Free and destroy functions
+int			kill_philos(t_philo **philos, int size);
 void		*free_array(void **arr, int size);
 void		*free_philos(t_philo **p, int size);
 void		*free_table(t_table *t);
+void		clean_exit_child(t_philo *p, int status);
 
 // Utilities
 

@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 20:14:14 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 14:37:45 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 15:04:32 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,22 @@
  * @param philos Array of philosophers.
  * @param size Size of the array.
  * 
- * @return Always returns NULL for convenience.
+ * @return Always returns 0 for convenience.
  */
-void	*kill_philos(t_philo **philos, int size)
+int	kill_philos(t_philo **philos, int size)
 {
 	int	i;
 
 	i = -1;
 	while (++i < size)
-		kill(philos[i]->pid, SIGKILL);
-	return (NULL);
+	{
+		if (philos[i]->pid > 0)
+		{
+			kill(philos[i]->pid, SIGKILL);
+			philos[i]->pid = 0;
+		}
+	}
+	return (0);
 }
 
 /**
@@ -68,6 +74,8 @@ void	*free_table(t_table *t)
 			sem_close(t->forks_sem);
 		if (t->print_sem != SEM_FAILED)
 			sem_close(t->print_sem);
+		if (t->death_sem != SEM_FAILED)
+			sem_close(t->death_sem);
 		if (t->meals_required > 0 && t->meals_sem != SEM_FAILED)
 			sem_close(t->meals_sem);
 		free(t);

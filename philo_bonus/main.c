@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 14:33:46 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 15:20:13 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,15 @@ int	start_simulation(t_table *table)
 	{
 		table->philos[i]->pid = fork();
 		if (table->philos[i]->pid == -1)
-			return (errmsg_null(FORK_ERR));
+			return (errmsg_null(FORK_ERR), kill_philos(table->philos, i));
+		if (table->philos[i]->pid == 0)
+			philo_routine(table);
 	}
-	if (table->n > 1
-		&& pthread_create(&table->reaper, 0, &reaper_routine, table) != 0)
-		return (errmsg_null(THREAD_ERR), join_philos(table->philos, i));
+	waitpid(-1, 0, 0);
+	kill(-1, SIGKILL);
+	// if (table->n > 1
+	// 	&& pthread_create(&table->reaper, 0, &reaper_routine, table) != 0)
+	// 	return (errmsg_null(THREAD_ERR), kill_philos(table->philos, i));
 	return (1);
 }
 
@@ -66,6 +70,7 @@ int	main(int ac, char **av)
 	table = get_table(ac, av);
 	if (!table)
 		return (errmsg("Error building the table\n", 0, 0, 1));
+	start_simulation(table);
 	// if (!start_simulation(table))
 	// {
 	// 	free_table(table);

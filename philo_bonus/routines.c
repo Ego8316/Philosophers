@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 14:35:36 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 15:18:38 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,29 @@ void	*reaper_routine(void *d)
 	i = -1;
 	while (++i)
 		sem_wait(table->meals_sem);
+	kill_philos(table->philos, table->n);
+	return (NULL);
+}
+
+static void	*tiny_reaper(void *d)
+{
+	t_philo	*p;
+	time_t	last_meal_time;
+
+	p = (t_philo *)d;
+	delay_start(p->table->start_time);
+	while (1)
+	{
+		sem_wait(p->last_meal_sem);
+		last_meal_time = p->last_meal_time;
+		sem_post(p->last_meal_sem);
+		if (get_time_in_ms() - last_meal_time > p->table->time_to_die)
+		{
+			print_status(p, DECEASED);
+			sem_post(p->table->death_sem);
+		}
+		ft_usleep(1);
+	}
 	return (NULL);
 }
 
@@ -130,6 +153,9 @@ void	*philo_routine(void *d)
 	t_philo	*p;
 
 	p = (t_philo *)d;
+	if (!open_global_semaphores(p->table) || !init_local_semaphore(p)
+		|| !pthread_create(&p->reaper, 0, tiny_reaper, 0))
+		clean_exit_child(p, 2);
 	sem_wait(p->last_meal_sem);
 	p->last_meal_time = p->table->start_time;
 	sem_post(p->last_meal_sem);
@@ -139,7 +165,7 @@ void	*philo_routine(void *d)
 		print_status(p, FORK);
 		ft_usleep(p->table->time_to_die);
 		print_status(p, DECEASED);
-		return (NULL);
+		clean_exit_child(p, 0);
 	}
 	while (1)
 	{
