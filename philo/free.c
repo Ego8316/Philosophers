@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 20:14:14 by ego               #+#    #+#             */
-/*   Updated: 2025/05/30 01:19:32 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 14:37:53 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	destroy_mutexes(pthread_mutex_t *m, int size)
  * 
  * @param arr Array of pointers to be freed.
  * @param size Size of the array.
+ * 
+ * @return Always returns NULL for convenience.
  */
 void	*free_array(void **arr, int size)
 {

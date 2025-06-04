@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 14:28:32 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 14:35:36 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,13 @@
 void	*reaper_routine(void *d)
 {
 	t_table	*table;
+	int		i;
 
 	table = (t_table *)d;
 	delay_start(table->start_time);
-	while (1)
-	{
-		table->sim_running = 0;
-		ft_usleep(1);
-	}
+	i = -1;
+	while (++i)
+		sem_wait(table->meals_sem);
 	return (NULL);
 }
 
