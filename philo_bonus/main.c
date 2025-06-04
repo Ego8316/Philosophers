@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 00:42:31 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 01:01:06 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,9 @@ int	end_simulation(t_table *table)
 			status = 1;
 		}
 	}
-	pthread_join(table->reaper, 0);
 	if (table->n > 1 && table->meals_required > 0)
 		pthread_join(table->watchdog, 0);
+	pthread_join(table->reaper, 0);
 	return (status);
 }
 
