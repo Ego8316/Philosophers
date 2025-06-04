@@ -6,11 +6,21 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 21:11:05 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 23:04:53 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	is_simulation_running(t_philo *p)
+{
+	int	running;
+
+	sem_wait(p->sim_running_sem);
+	running = p->table->sim_running;
+	sem_post(p->sim_running_sem);
+	return (running);
+}
 
 /**
  * @brief Monitor routine that waits for all philosophers to finish eating.
@@ -62,7 +72,7 @@ void	*hunger_routine(void *d)
 
 	p = (t_philo *)d;
 	delay_start(p->table->start_time);
-	while (1)
+	while (is_simulation_running(p))
 	{
 		sem_wait(p->last_meal_sem);
 		last_meal_time = p->last_meal_time;
@@ -71,6 +81,9 @@ void	*hunger_routine(void *d)
 		{
 			print_status(p, DECEASED);
 			i = -1;
+			sem_wait(p->sim_running_sem);
+			p->table->sim_running = 0;
+			sem_post(p->sim_running_sem);
 			while (++i < p->table->n)
 				sem_post(p->table->death_sem);
 		}
@@ -95,7 +108,9 @@ void	*observer_routine(void *d)
 	p = (t_philo *)d;
 	delay_start(p->table->start_time);
 	sem_wait(p->table->death_sem);
-	clean_exit_child(p, 0);
+	sem_wait(p->sim_running_sem);
+	p->table->sim_running = 0;
+	sem_post(p->sim_running_sem);
 	return (NULL);
 }
 

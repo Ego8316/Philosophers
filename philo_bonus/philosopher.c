@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 21:09:29 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 23:02:56 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ static void	philo_routine(t_philo *p)
 	delay_start(p->table->start_time);
 	if (p->id % 2)
 		think_routine(p);
-	while (1)
+	while (is_simulation_running(p))
 	{
 		eat_sleep_routine(p);
 		think_routine(p);
@@ -143,7 +143,8 @@ void	philosopher(t_philo *p)
 		pthread_join(p->hunger, 0);
 		clean_exit_child(p, 1);
 	}
-	pthread_detach(p->hunger);
-	pthread_detach(p->observer);
 	philo_routine(p);
+	pthread_join(p->hunger, 0);
+	pthread_join(p->observer, 0);
+	clean_exit_child(p, 0);
 }

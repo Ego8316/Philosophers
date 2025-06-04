@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 21:14:14 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 22:58:08 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@
 # define PRINT_SEM_NAME "/print_sem"
 # define MEALS_SEM_NAME "/meals_sem"
 # define DEATH_SEM_NAME "/death_sem"
-# define LAST_MEAL_SEM_PREFIX "/last_meal_sem_"
+# define LM_PREFIX "/last_meal_sem_"
+# define SR_PREFIX "/sim_running_sem_"
 # define BUFFER_SIZE 32
 # define COLOR_R "\033[31m"
 # define COLOR_G "\033[32m"
@@ -61,8 +62,10 @@ typedef struct s_philo
 	pid_t			pid;
 	time_t			last_meal_time;
 	char			last_meal_sem_name[BUFFER_SIZE];
+	char			sim_running_sem_name[BUFFER_SIZE];
 	int				meals_eaten;
 	sem_t			*last_meal_sem;
+	sem_t			*sim_running_sem;
 	pthread_t		hunger;
 	pthread_t		observer;
 	struct s_table	*table;
@@ -93,6 +96,7 @@ t_table		*get_table(int ac, char **av);
 void		philosopher(t_philo *p);
 
 // Monitoring
+int			is_simulation_running(t_philo *p);
 void		*watchdog_routine(void *d);
 void		*observer_routine(void *d);
 void		*hunger_routine(void *d);
@@ -102,7 +106,7 @@ void		print_status(t_philo *philo, t_status status);
 void		unlink_global_semaphores(void);
 int			init_global_semaphores(t_table *t);
 int			open_global_semaphores(t_table *t);
-void		get_last_meal_sem_name(char *last_meal_sem_name, int id);
+void		get_unique_sem_name(char *sem_name, char *prefix, int id);
 int			init_local_semaphore(t_philo *p);
 
 // Time
