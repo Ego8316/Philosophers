@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 14:17:55 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 14:18:27 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ void		*reaper_routine(void *d);
 void		print_status(t_philo *philo, t_status status);
 
 // Semaphores
-int		init_global_semaphores(t_table *t);
-int		open_global_semaphores(t_table *t);
-void	get_last_meal_sem_name(char *last_meal_sem_name, int id);
+int			init_global_semaphores(t_table *t);
+int			open_global_semaphores(t_table *t);
+void		get_last_meal_sem_name(char *last_meal_sem_name, int id);
 
 // Time
 time_t		get_time_in_ms(void);

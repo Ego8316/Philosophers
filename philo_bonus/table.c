@@ -6,19 +6,11 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:46:00 by ego               #+#    #+#             */
-/*   Updated: 2025/06/04 13:24:09 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/04 14:18:39 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-/**
- * @brief Initializes semaphores.
- */
-static int	get_semaphores(t_table *t)
-{
-
-}
 
 /**
  * @brief Allocates and initializes an array of philosopher structures given
