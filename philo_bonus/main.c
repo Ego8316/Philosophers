@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 03:30:32 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 03:40:28 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ int	end_simulation(t_table *table)
 	sem_wait(table->sim_running_sem);
 	table->sim_running = 0;
 	sem_post(table->death_sem);
-	sem_post(table->meals_sem);
+	if (table->n > 1 && table->meals_required > 0)
+		sem_post(table->meals_sem);
 	sem_post(table->sim_running_sem);
 	if (table->n > 1 && table->meals_required > 0)
 		pthread_join(table->watchdog, NULL);
