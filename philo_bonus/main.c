@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 02:17:39 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 02:28:58 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	start_simulation(t_table *table)
 {
 	int	i;
 
-	table->start_time = get_time_in_ms() + 50 * table->n;
+	table->start_time = get_time_in_ms() + 500 * table->n;
 	table->sim_running = 1;
 	i = -1;
 	while (++i < table->n)
