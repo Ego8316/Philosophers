@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 02:57:32 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 03:19:40 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void	*watchdog_routine(void *d)
 	table->sim_running = 0;
 	sem_post(table->death_sem);
 	sem_post(table->sim_running_sem);
+	printf("Watchdog exited after winning!\n");
 	return (NULL);
 }
 
@@ -106,6 +107,7 @@ void	*reaper_routine(void *d)
 
 	table = (t_table *)d;
 	delay_start(table->start_time);
+	printf("Here? %p %p %p\n", table->death_sem, table->sim_running_sem, table->meals_sem);
 	sem_wait(table->death_sem);
 	sem_wait(table->sim_running_sem);
 	if (table->sim_running == 0)
@@ -118,6 +120,7 @@ void	*reaper_routine(void *d)
 	if (table->meals_required > 0)
 		sem_post(table->meals_sem);
 	sem_post(table->sim_running_sem);
+	printf("Reaper exited after winning!\n");
 	return (NULL);
 }
 
