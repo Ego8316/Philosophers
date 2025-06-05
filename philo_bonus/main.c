@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 02:28:58 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 03:01:09 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,12 @@ int	end_simulation(t_table *table)
 	{
 		if (wait_and_get_exit_code(table->philos[i]->pid) == 1)
 		{
+			sem_wait(table->sim_running_sem);
+			kill_philos(table->philos, table->n);
+			table->sim_running = 0;
+			sem_post(table->death_sem);
+			sem_post(table->meals_sem);
+			sem_post(table->sim_running_sem);
 			status = 1;
 		}
 	}

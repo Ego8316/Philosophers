@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:19:39 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 02:49:15 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 02:57:57 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,19 @@ void	solitary_philosopher_routine(t_philo *p)
  */
 static void	eat_sleep_routine(t_philo *p)
 {
-	sem_wait(p->forks_sem);
+	sem_wait(p->table->forks_sem);
 	print_status(p, FORK);
-	sem_wait(p->forks_sem);
+	sem_wait(p->table->forks_sem);
 	print_status(p, FORK);
 	sem_wait(p->last_meal_sem);
 	p->last_meal_time = get_time_in_ms();
 	sem_post(p->last_meal_sem);
 	print_status(p, EATING);
 	ft_usleep(p->table->time_to_eat);
-	sem_post(p->forks_sem);
-	sem_post(p->forks_sem);
+	sem_post(p->table->forks_sem);
+	sem_post(p->table->forks_sem);
 	if (++p->meals_eaten == p->table->meals_required)
-		sem_post(p->meals_sem);
+		sem_post(p->table->meals_sem);
 	print_status(p, SLEEPING);
 	ft_usleep(p->table->time_to_sleep);
 }
@@ -135,7 +135,7 @@ void	philosopher(t_philo *p)
 		solitary_philosopher_routine(p);
 		return ;
 	}
-	if (!open_global_semaphores(p) || !init_local_semaphore(p)
+	if (!init_local_semaphore(p)
 		|| pthread_create(&p->hunger, 0, hunger_routine, p) != 0)
 		clean_exit_child(p, 1);
 	philo_routine(p);
