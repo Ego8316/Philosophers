@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 03:03:01 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 03:56:21 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,10 @@ typedef struct s_table
 
 t_table		*get_table(int ac, char **av);
 
-// Routines
-void		philosopher(t_philo *p);
+// Routines and monitoring
 
-// Monitoring
+void		philosopher(t_philo *p);
+int			is_simulation_running(t_table *t);
 void		*watchdog_routine(void *d);
 void		*reaper_routine(void *d);
 void		*hunger_routine(void *d);

@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 03:40:28 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 04:32:33 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	start_simulation(t_table *table)
 {
 	int	i;
 
-	table->start_time = get_time_in_ms() + 500 * table->n;
+	table->start_time = get_time_in_ms() + 50 * table->n;
 	table->sim_running = 1;
 	i = -1;
 	while (++i < table->n)
@@ -83,28 +83,25 @@ int	start_simulation(t_table *table)
 
 int	end_simulation(t_table *table)
 {
-	int	status;
 	int	i;
 
-	status = 0;
 	i = -1;
 	while (++i < table->n)
 	{
-		if (wait_and_get_exit_code(table->philos[i]->pid) == 1)
+		wait_and_get_exit_code(-1);
+		sem_wait(table->sim_running_sem);
+		if (table->sim_running == 1)
 		{
-			status = 1;
+			kill_philos(table->philos, table->n);
+			table->sim_running = 0;
+			sem_post(table->death_sem);
+			if (table->n > 1 && table->meals_required > 0)
+				sem_post(table->sim_running_sem);
+			return (1);
 		}
+		sem_post(table->sim_running_sem);
 	}
-	sem_wait(table->sim_running_sem);
-	table->sim_running = 0;
-	sem_post(table->death_sem);
-	if (table->n > 1 && table->meals_required > 0)
-		sem_post(table->meals_sem);
-	sem_post(table->sim_running_sem);
-	if (table->n > 1 && table->meals_required > 0)
-		pthread_join(table->watchdog, NULL);
-	pthread_join(table->reaper, NULL);
-	return (status);
+	return (0);
 }
 
 /**
@@ -134,5 +131,8 @@ int	main(int ac, char **av)
 		return (errmsg("Error starting the simulation\n", 0, 0, 1));
 	status = end_simulation(table);
 	free_table(table);
+	if (table->n > 1 && table->meals_required > 0)
+		pthread_join(table->watchdog, NULL);
+	pthread_join(table->reaper, NULL);
 	return (status);
 }

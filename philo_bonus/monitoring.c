@@ -6,11 +6,21 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 03:19:40 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 04:13:23 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	is_simulation_running(t_table *t)
+{
+	int	running;
+
+	sem_wait(t->sim_running_sem);
+	running = t->sim_running;
+	sem_post(t->sim_running_sem);
+	return (running);
+}
 
 /**
  * @brief Per-philosopher monitoring thread that detects death by starvation.
@@ -70,6 +80,8 @@ void	*watchdog_routine(void *d)
 	delay_start(table->start_time);
 	while (table->full_philos < table->n)
 	{
+		if (!is_simulation_running(table))
+			return (NULL);
 		sem_wait(table->meals_sem);
 		sem_wait(table->sim_running_sem);
 		if (table->sim_running == 1)
@@ -88,7 +100,6 @@ void	*watchdog_routine(void *d)
 	table->sim_running = 0;
 	sem_post(table->death_sem);
 	sem_post(table->sim_running_sem);
-	printf("Watchdog exited after winning!\n");
 	return (NULL);
 }
 
@@ -107,20 +118,17 @@ void	*reaper_routine(void *d)
 
 	table = (t_table *)d;
 	delay_start(table->start_time);
-	printf("Here? %p %p %p\n", table->death_sem, table->sim_running_sem, table->meals_sem);
-	sem_wait(table->death_sem);
-	sem_wait(table->sim_running_sem);
-	if (table->sim_running == 0)
-	{
-		sem_post(table->sim_running_sem);
+	if (!is_simulation_running(table))
 		return (NULL);
-	}
+	sem_wait(table->death_sem);
+	if (!is_simulation_running(table))
+		return (NULL);
+	sem_wait(table->sim_running_sem);
 	kill_philos(table->philos, table->n);
 	table->sim_running = 0;
 	if (table->meals_required > 0)
 		sem_post(table->meals_sem);
 	sem_post(table->sim_running_sem);
-	printf("Reaper exited after winning!\n");
 	return (NULL);
 }
 
