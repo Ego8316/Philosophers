@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 04:32:33 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 12:31:09 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	start_simulation(t_table *table)
 {
 	int	i;
 
-	table->start_time = get_time_in_ms() + 50 * table->n;
+	table->start_time = get_time_in_ms() + 500 * table->n;
 	table->sim_running = 1;
 	i = -1;
 	while (++i < table->n)
@@ -130,9 +130,9 @@ int	main(int ac, char **av)
 	if (!start_simulation(table))
 		return (errmsg("Error starting the simulation\n", 0, 0, 1));
 	status = end_simulation(table);
-	free_table(table);
 	if (table->n > 1 && table->meals_required > 0)
 		pthread_join(table->watchdog, NULL);
 	pthread_join(table->reaper, NULL);
+	free_table(table);
 	return (status);
 }

@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 04:13:23 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 12:39:11 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void	*watchdog_routine(void *d)
 	}
 	kill_philos(table->philos, table->n);
 	table->sim_running = 0;
+	sem_post(table->meals_sem);
 	sem_post(table->death_sem);
 	sem_post(table->sim_running_sem);
 	return (NULL);
@@ -121,6 +122,7 @@ void	*reaper_routine(void *d)
 	if (!is_simulation_running(table))
 		return (NULL);
 	sem_wait(table->death_sem);
+	sem_post(table->death_sem);
 	if (!is_simulation_running(table))
 		return (NULL);
 	sem_wait(table->sim_running_sem);
