@@ -6,61 +6,11 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 02:22:19 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 02:40:20 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int	is_simulation_running(t_table *t)
-{
-	int	running;
-
-	sem_wait(t->sim_running_sem);
-	running = t->sim_running;
-	sem_post(t->sim_running_sem);
-	return (running);
-}
-
-/**
- * @brief Monitor routine that waits for all philosophers to finish eating.
- * 
- * Runs as a dedicated thread in the main process. It blocks on the `meals_sem`
- * semaphore `n` times - once per philosopher - effectively waiting until all
- * philosophers have reached their required meal count. Once done, posts
- * `death_sem` `n` timesto allow child processes to exit gracefully.
- * 
- * @param d A void pointer to the table structure.
- * 
- * @return Always returns NULL.
- */
-void	*watchdog_routine(void *d)
-{
-	t_table	*table;
-
-	table = (t_table *)d;
-	delay_start(table->start_time);
-	while (table->full_philos < table->n)
-	{
-		if (!is_simulation_running(table))
-			return (NULL);
-		sem_wait(table->meals_sem);
-		sem_wait(table->sim_running_sem);
-		if (table->sim_running == 1)
-			table->full_philos++;
-		else
-			table->full_philos = table->n;
-		sem_post(table->sim_running_sem);
-	}
-	if (!is_simulation_running(table))
-		return (NULL);
-	sem_wait(table->sim_running_sem);
-	table->sim_running = 0;
-	kill_philos(table->philos, table->n);
-	sem_post(table->death_sem);
-	sem_post(table->sim_running_sem);
-	return (NULL);
-}
 
 /**
  * @brief Per-philosopher monitoring thread that detects death by starvation.
@@ -101,6 +51,47 @@ void	*hunger_routine(void *d)
 }
 
 /**
+ * @brief Monitor routine that waits for all philosophers to finish eating.
+ * 
+ * Runs as a dedicated thread in the main process. It blocks on the `meals_sem`
+ * semaphore `n` times - once per philosopher - effectively waiting until all
+ * philosophers have reached their required meal count. Once done, posts
+ * `death_sem` `n` timesto allow child processes to exit gracefully.
+ * 
+ * @param d A void pointer to the table structure.
+ * 
+ * @return Always returns NULL.
+ */
+void	*watchdog_routine(void *d)
+{
+	t_table	*table;
+
+	table = (t_table *)d;
+	delay_start(table->start_time);
+	while (table->full_philos < table->n)
+	{
+		sem_wait(table->meals_sem);
+		sem_wait(table->sim_running_sem);
+		if (table->sim_running == 1)
+			table->full_philos++;
+		else
+			table->full_philos = table->n;
+		sem_post(table->sim_running_sem);
+	}
+	sem_wait(table->sim_running_sem);
+	if (table->sim_running == 0)
+	{
+		sem_post(table->sim_running_sem);
+		return (NULL);
+	}
+	kill_philos(table->philos, table->n);
+	table->sim_running = 0;
+	sem_post(table->death_sem);
+	sem_post(table->sim_running_sem);
+	return (NULL);
+}
+
+/**
  * @brief Exit observer thread for each philosopher.
  * 
  * Runs in the main process and waits on the shared `death_sem`. When
@@ -116,12 +107,15 @@ void	*reaper_routine(void *d)
 	table = (t_table *)d;
 	delay_start(table->start_time);
 	sem_wait(table->death_sem);
-	if (!is_simulation_running(table))
-		return (NULL);
 	sem_wait(table->sim_running_sem);
+	if (table->sim_running == 0)
+	{
+		sem_post(table->sim_running_sem);
+		return (NULL);
+	}
 	kill_philos(table->philos, table->n);
 	table->sim_running = 0;
-	while (table->meals_required > 0 && table->full_philos++ < table->n)
+	if (table->meals_required > 0)
 		sem_post(table->meals_sem);
 	sem_post(table->sim_running_sem);
 	return (NULL);
