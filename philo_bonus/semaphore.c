@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 13:06:38 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 01:49:21 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 02:48:11 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,23 +73,22 @@ int	init_global_semaphores(t_table *t)
  * 
  * If any semaphore fails to open, prints the appropriate error message.
  * 
- * @param t Pointer to the table structure.
+ * @param t Pointer to the philo structure.
  * 
  * @return 1 on success, 0 otherwise.
  * 
  * @note This function is intended to be called in a child process.
  */
-int	open_global_semaphores(t_table *t)
+int	open_global_semaphores(t_philo *p)
 {
-	t->forks_sem = sem_open(FORKS_SEM_NAME, 0);
-	t->print_sem = sem_open(PRINT_SEM_NAME, 0);
-	t->death_sem = sem_open(DEATH_SEM_NAME, 0);
-	t->sim_running_sem = SEM_FAILED;
-	if (t->meals_required > 0)
-		t->meals_sem = sem_open(MEALS_SEM_NAME, 0);
-	if (t->forks_sem == SEM_FAILED || t->print_sem == SEM_FAILED
-		|| (t->meals_required > 0 && t->meals_sem == SEM_FAILED)
-		|| t->death_sem == SEM_FAILED)
+	p->forks_sem = sem_open(FORKS_SEM_NAME, 0);
+	p->print_sem = sem_open(PRINT_SEM_NAME, 0);
+	p->death_sem = sem_open(DEATH_SEM_NAME, 0);
+	if (p->table->meals_required > 0)
+		p->meals_sem = sem_open(MEALS_SEM_NAME, 0);
+	if (p->forks_sem == SEM_FAILED || p->print_sem == SEM_FAILED
+		|| (p->table->meals_required > 0 && p->meals_sem == SEM_FAILED)
+		|| p->death_sem == SEM_FAILED)
 		return (errmsg_null(SEM_OPEN_ERR), 0);
 	return (1);
 }

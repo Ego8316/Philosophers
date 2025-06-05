@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 02:08:57 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 02:49:33 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,10 @@ typedef struct s_philo
 	char			last_meal_sem_name[BUFFER_SIZE];
 	int				meals_eaten;
 	sem_t			*last_meal_sem;
+	sem_t			*print_sem;
+	sem_t			*forks_sem;
+	sem_t			*meals_sem;
+	sem_t			*death_sem;
 	pthread_t		hunger;
 	struct s_table	*table;
 }	t_philo;
@@ -104,7 +108,7 @@ void		print_status(t_philo *philo, t_status status);
 // Semaphores
 void		unlink_global_semaphores(void);
 int			init_global_semaphores(t_table *t);
-int			open_global_semaphores(t_table *t);
+int			open_global_semaphores(t_philo *p);
 void		get_unique_sem_name(char *sem_name, char *prefix, int id);
 int			init_local_semaphore(t_philo *p);
 

@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 02:40:20 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 02:51:27 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,12 +147,12 @@ void	print_status(t_philo *philo, t_status status)
 		COLOR_B
 	};
 
-	sem_wait(philo->table->print_sem);
+	sem_wait(philo->print_sem);
 	printf("%li\tPhilosopher %i %s%s%s\n",
 		get_time_in_ms() - philo->table->start_time,
 		philo->id, colors[status], labels[status], C_RESET);
 	fflush(stdout);
 	if (status != DECEASED)
-		sem_post(philo->table->print_sem);
+		sem_post(philo->print_sem);
 	return ;
 }

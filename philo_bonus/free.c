@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 20:14:14 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 01:59:40 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 02:51:16 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,7 @@ int	kill_philos(t_philo **philos, int size)
 
 	i = -1;
 	while (++i < size)
-	{
-		// if (philos[i]->pid > 0)
-		// {
 		kill(philos[i]->pid, SIGKILL);
-		// 	philos[i]->pid = 0;
-		// }
-	}
 	return (0);
 }
 
@@ -104,6 +98,14 @@ void	clean_exit_child(t_philo *p, int status)
 {
 	if (p->last_meal_sem != SEM_FAILED)
 		sem_close(p->last_meal_sem);
+	if (p->death_sem != SEM_FAILED)
+		sem_close(p->death_sem);
+	if (p->forks_sem != SEM_FAILED)
+		sem_close(p->forks_sem);
+	if (p->print_sem != SEM_FAILED)
+		sem_close(p->print_sem);
+	if (p->table->meals_required > 0 && p->meals_sem != SEM_FAILED)
+		sem_close(p->meals_sem);
 	sem_unlink(p->last_meal_sem_name);
 	free_table(p->table);
 	exit(status);
