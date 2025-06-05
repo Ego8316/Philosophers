@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 01:01:06 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 02:17:39 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,12 @@ int	end_simulation(t_table *table)
 	{
 		if (wait_and_get_exit_code(table->philos[i]->pid) == 1)
 		{
-			kill_philos(table->philos, table->n);
 			status = 1;
 		}
 	}
 	if (table->n > 1 && table->meals_required > 0)
-		pthread_join(table->watchdog, 0);
-	pthread_join(table->reaper, 0);
+		pthread_join(table->watchdog, NULL);
+	pthread_join(table->reaper, NULL);
 	return (status);
 }
 

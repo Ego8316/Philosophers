@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 20:14:14 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 00:05:53 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 01:59:40 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ int	kill_philos(t_philo **philos, int size)
 	i = -1;
 	while (++i < size)
 	{
-		if (philos[i]->pid > 0)
-		{
-			kill(philos[i]->pid, SIGKILL);
-			philos[i]->pid = 0;
-		}
+		// if (philos[i]->pid > 0)
+		// {
+		kill(philos[i]->pid, SIGKILL);
+		// 	philos[i]->pid = 0;
+		// }
 	}
 	return (0);
 }
@@ -83,6 +83,8 @@ void	*free_table(t_table *t)
 			sem_close(t->print_sem);
 		if (t->death_sem != SEM_FAILED)
 			sem_close(t->death_sem);
+		if (t->sim_running_sem != SEM_FAILED)
+			sem_close(t->sim_running_sem);
 		if (t->meals_required > 0 && t->meals_sem != SEM_FAILED)
 			sem_close(t->meals_sem);
 		unlink_global_semaphores();

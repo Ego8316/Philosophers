@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:17 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 00:43:52 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 02:08:57 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@
 # define PRINT_SEM_NAME "/print_sem"
 # define MEALS_SEM_NAME "/meals_sem"
 # define DEATH_SEM_NAME "/death_sem"
+# define SIM_SEM_NAME "/sim_running_sem"
 # define LM_PREFIX "/last_meal_sem_"
-# define SR_PREFIX "/sim_running_sem_"
 # define BUFFER_SIZE 32
 # define COLOR_R "\033[31m"
 # define COLOR_G "\033[32m"
@@ -75,12 +75,14 @@ typedef struct s_table
 	time_t			time_to_eat;
 	time_t			time_to_sleep;
 	int				meals_required;
+	int				full_philos;
 	int				sim_running;
 	t_philo			**philos;
 	sem_t			*print_sem;
 	sem_t			*forks_sem;
 	sem_t			*meals_sem;
 	sem_t			*death_sem;
+	sem_t			*sim_running_sem;
 	time_t			start_time;
 	pthread_t		watchdog;
 	pthread_t		reaper;

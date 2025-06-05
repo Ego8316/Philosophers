@@ -6,11 +6,21 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 14:02:05 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 00:49:33 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 02:16:50 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	is_simulation_running(t_table *t)
+{
+	int	running;
+
+	sem_wait(t->sim_running_sem);
+	running = t->sim_running;
+	sem_post(t->sim_running_sem);
+	return (running);
+}
 
 /**
  * @brief Monitor routine that waits for all philosophers to finish eating.
@@ -27,14 +37,28 @@
 void	*watchdog_routine(void *d)
 {
 	t_table	*table;
-	int		i;
 
 	table = (t_table *)d;
 	delay_start(table->start_time);
-	i = -1;
-	while (++i < table->n)
+	while (table->full_philos < table->n)
+	{
+		if (!is_simulation_running(table))
+			return (NULL);
 		sem_wait(table->meals_sem);
+		sem_wait(table->sim_running_sem);
+		if (table->sim_running == 1)
+			table->full_philos++;
+		else
+			table->full_philos = table->n;
+		sem_post(table->sim_running_sem);
+	}
+	if (!is_simulation_running(table))
+		return (NULL);
+	sem_wait(table->sim_running_sem);
+	table->sim_running = 0;
+	kill_philos(table->philos, table->n);
 	sem_post(table->death_sem);
+	sem_post(table->sim_running_sem);
 	return (NULL);
 }
 
@@ -79,20 +103,27 @@ void	*hunger_routine(void *d)
 /**
  * @brief Exit observer thread for each philosopher.
  * 
- * Runs in each philosopher process and waits on the shared `death_sem`. When
- * signaled, it performs cleanup and exits the process gracefully.
+ * Runs in the main process and waits on the shared `death_sem`. When
+ * signaled, it kills all the child processes.
  * 
  * @param d A void pointer to the table structure.
  * @return Always returns NULL.
  */
 void	*reaper_routine(void *d)
 {
-	t_table	*t;
+	t_table	*table;
 
-	t = (t_table *)d;
-	delay_start(t->start_time);
-	sem_wait(t->death_sem);
-	kill_philos(t->philos, t->n);
+	table = (t_table *)d;
+	delay_start(table->start_time);
+	sem_wait(table->death_sem);
+	if (!is_simulation_running(table))
+		return (NULL);
+	sem_wait(table->sim_running_sem);
+	kill_philos(table->philos, table->n);
+	table->sim_running = 0;
+	while (table->meals_required > 0 && table->full_philos++ < table->n)
+		sem_post(table->meals_sem);
+	sem_post(table->sim_running_sem);
 	return (NULL);
 }
 
