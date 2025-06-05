@@ -6,18 +6,14 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:40:07 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 13:06:39 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 19:24:40 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 /**
- * @brief Waits for a process to terminate and retrieves its exit code.
- * 
- * Checks if the process was exited normally or was terminated by a signal and
- * returns the corresponding exit code. `wpid == pid` is a safeguard to ensure
- * the child process we just waited for actually is the one expected.
+ * @brief Waits for a specific process to terminate and returns its exit code.
  * 
  * @param pid PID of the child process to wait for.
  * 
@@ -45,15 +41,13 @@ int	wait_and_get_exit_code(pid_t pid)
 /**
  * @brief Launches the philosopher simulation.
  * 
- * Initializes the simulation's start time with a delay to allow threads to be
- * perfectly synchronized, sets its flag as running and creates a thread for
- * each philosopher. If there is more than one philosopher, also creates a
- * thread for the reaper to monitor their states. If any thread creation
- * fails, joins all previously created ones.
+ * Sets up the simulation by forking `n` philosopher processes. Starts
+ * `reaper_routine` to monitor for death. If multiple philosophers and a meal
+ * requirement are present, also launches `watchdog_routine`.
  * 
  * @param table Pointer to the table structure.
  * 
- * @return 1 if all threads are successfully created, 0 otherwise.
+ * @return 1 on success, 0 on any failure (e.g. fork or thread error).
  */
 int	start_simulation(t_table *table)
 {
@@ -81,6 +75,16 @@ int	start_simulation(t_table *table)
 	return (1);
 }
 
+/**
+ * @brief Collects exit statuses of all philosopher processes. 
+ * 
+ * Waits on each philosopher process. If any philosopher exits early while
+ * simulation is still marked as running, forcefully ends the simulation.
+ * 
+ * @param table Pointer to the simulation table.
+ * 
+ * @return 1 if the early exit was detected and handled, 0 otherwise.
+ */
 int	end_simulation(t_table *table)
 {
 	int	i;
@@ -108,7 +112,8 @@ int	end_simulation(t_table *table)
  * @brief Entry point of the philosopher simulation.
  * 
  * Validates user input, initializes the simulation table, and starts the
- * simulation. Joins all created threads before freeing resources.
+ * simulation. Waits for all created child processes, wait for all created
+ * threads before freeing resources.
  * 
  * @param ac Argument count.
  * @param av Argument vector.

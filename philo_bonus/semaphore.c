@@ -6,7 +6,7 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 13:06:38 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 04:00:51 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 19:39:33 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 /**
  * @brief Unlinks all global semaphores.
+ * 
+ * Removes named semaphores from the system, ensuring no stale semaphores
+ * remain from previous runs.
  */
 void	unlink_global_semaphores(void)
 {
@@ -25,26 +28,17 @@ void	unlink_global_semaphores(void)
 }
 
 /**
- * @brief Initializes the global named semaphores for the simulation.
+ * @brief Initializes the global semaphores shared across all philosophers.
  * 
- * First unlinks any existing named semaphores to ensure a clean start, then
- * creates and opens the following semaphores:
- * @brief - `forks_sem`: initialized to the number of philosophers, controlling
- * access to forks.
- * @brief - `print_sem`: initialized to 1, used to synchronize standard output.
- * @brief - `meals_sem`: initialized to 0, used to track when philosophers have
- * reached the required number of meals (if specified).
+ * Unlinks any existing named semaphores before creating new ones.
+ * Opens semaphores for forks, printing synchronization, simulation state,
+ * philosopher meals tracking, and death detection.
  * 
- * Named semaphores are created with exclusive access flags `O_CREAT` and
- * `O_EXCL` and permissions set to 0644.
+ * @param t Pointer to the simulation table structure.
  * 
- * If any semaphore fails to open, prints the appropriate error message.
+ * @return Returns 1 on successful semaphore initialization, 0 on failure.
  * 
- * @param t Pointer to the table structure.
- * 
- * @return 1 on success, 0 otherwise.
- * 
- * @note Should be called in the parent process before forking.
+ * @note Should be called before creating philosopher processes.
  */
 int	init_global_semaphores(t_table *t)
 {

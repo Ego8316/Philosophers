@@ -6,14 +6,17 @@
 /*   By: ego <ego@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 20:14:14 by ego               #+#    #+#             */
-/*   Updated: 2025/06/05 04:31:58 by ego              ###   ########.fr       */
+/*   Updated: 2025/06/05 19:11:20 by ego              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 /**
- * @brief Kills up to `size` philosophers of an array of philosophers.
+ * @brief Sends `SIGKILL`to up to `size` philosophers.
+ * 
+ * Iterates over the given array of philosopher pointers and forcefully
+ * terminates each associated process.
  * 
  * @param philos Array of philosophers.
  * @param size Size of the array.
