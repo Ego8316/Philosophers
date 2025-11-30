@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/ayogun/42-project-badges/main/badges/philosophersxm.png" height="150" alt="42 Philosophers Badge"/>
+  <img src="https://raw.githubusercontent.com/ayogun/42-project-badges/main/badges/philosophersm.png" height="150" alt="42 Philosophers Badge"/>
 </p>
 
 <p align="center">
