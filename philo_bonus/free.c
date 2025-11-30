@@ -13,14 +13,14 @@
 #include "philo.h"
 
 /**
- * @brief Sends `SIGKILL`to up to `size` philosophers.
- * 
+ * @brief Sends `SIGKILL` to up to `size` philosophers.
+ *
  * Iterates over the given array of philosopher pointers and forcefully
  * terminates each associated process.
- * 
+ *
  * @param philos Array of philosophers.
  * @param size Size of the array.
- * 
+ *
  * @return Always returns 0 for convenience.
  */
 int	kill_philos(t_philo **philos, int size)
@@ -35,10 +35,10 @@ int	kill_philos(t_philo **philos, int size)
 
 /**
  * @brief Frees up to `size` elements of an array of pointers.
- * 
+ *
  * @param arr Array of pointers to be freed.
  * @param size Size of the array.
- * 
+ *
  * @return Always returns NULL for convenience.
  */
 void	*free_array(void **arr, int size)
@@ -54,11 +54,10 @@ void	*free_array(void **arr, int size)
 }
 
 /**
- * @brief Frees all there is to free in the table structure. Also closes all
- * opened semaphores and unlinks them.
- * 
+ * @brief Releases table resources and closes/unlinks all semaphores.
+ *
  * @param t Pointer to the table structure.
- * 
+ *
  * @return Always returns NULL for convenience.
  */
 void	*free_table(t_table *t)
@@ -93,7 +92,7 @@ void	*free_table(t_table *t)
 /**
  * @brief Closes the local semaphore and unlinks it, then frees the table
  * structure and exits with provided exit code.
- * 
+ *
  * @param p Pointer to the philosopher.
  * @param status Exit code.
  */

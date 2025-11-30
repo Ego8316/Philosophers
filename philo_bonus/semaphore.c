@@ -33,11 +33,11 @@ void	unlink_global_semaphores(void)
  * Unlinks any existing named semaphores before creating new ones.
  * Opens semaphores for forks, printing synchronization, simulation state,
  * philosopher meals tracking, and death detection.
- * 
+ *
  * @param t Pointer to the simulation table structure.
- * 
- * @return Returns 1 on successful semaphore initialization, 0 on failure.
- * 
+ *
+ * @return 1 on successful semaphore initialization, 0 on failure.
+ *
  * @note Should be called before creating philosopher processes.
  */
 int	init_global_semaphores(t_table *t)

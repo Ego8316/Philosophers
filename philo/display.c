@@ -12,9 +12,9 @@
 
 #include "philo.h"
 
-/** 
+/**
  * @brief Writes a character to a file descriptor.
- * 
+ *
  * @param c The character to write.
  * @param fd The file descriptor.
  */
@@ -24,9 +24,9 @@ void	ft_putchar_fd(char c, int fd)
 	return ;
 }
 
-/** 
+/**
  * @brief Writes a string to a file descriptor.
- * 
+ *
  * @param s The string to write.
  * @param fd The file descriptor.
  */
@@ -40,9 +40,9 @@ void	ft_putstr_fd(const char *s, int fd)
 	return ;
 }
 
-/** 
+/**
  * @brief Writes a number to a file descriptor.
- * 
+ *
  * @param n The number to write.
  * @param fd The file descriptor.
  */
@@ -67,9 +67,9 @@ void	ft_putnbr_fd(int n, int fd)
 	return ;
 }
 
-/** 
+/**
  * @brief Writes a string followed by a newline to a file descriptor.
- * 
+ *
  * @param s The string to write.
  * @param fd The file descriptor.
  */
@@ -86,12 +86,13 @@ void	ft_putendl_fd(const char *s, int fd)
  * This function maps an integer index to a predefined string label
  * representing one of the expected command-line arguments for the program.
  * The labels are:
- * @brief - 0: "number_of_philosophers"
- * @brief - 1: "time_to_die"
- * @brief - 2: "time_to_sleep"
- * @brief - 3: "number_of_times_each_philosopher_must_eat"
+ * - 0: "number_of_philosophers"
+ * - 1: "time_to_die"
+ * - 2: "time_to_eat"
+ * - 3: "time_to_sleep"
+ * - 4: "number_of_times_each_philosopher_must_eat"
  *
- * @param i Index of the argument (from 0 to 3).
+ * @param i Index of the argument (from 0 to 4).
  *
  * @return A constant string describing the argument at position i, NULL if the
  * index is out of bounds.

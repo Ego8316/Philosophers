@@ -14,14 +14,14 @@
 
 /**
  * @brief Monitor routine that checks if the simulation should end.
- * 
+ *
  * This function runs in a separate thread and continuously checks whether a
  * philosopher has died or all philosophers have eaten enough. If either
  * condition is met, sets the shared `sim_running` flag to 0 to terminate the
  * simulation.
- * 
+ *
  * @param d A void pointer to the table structure.
- * 
+ *
  * @return Always returns NULL.
  */
 void	*reaper_routine(void *d)
@@ -46,21 +46,21 @@ void	*reaper_routine(void *d)
 
 /**
  * @brief Philosopher's routine for eating and sleeping.
- * 
- * @brief 1 - Pick up their forks (left and right) using mutexes.
- * @brief 2 - Print their actions to the console (taking forks, eating, and
- * sleeping).
- * @brief 3 - Update their last meal timestamp and increment their counter.
- * @brief 4 - Sleep for the configured amount of time after eating.
- * 
+ *
+ * Steps:
+ * 1. Lock left and right forks.
+ * 2. Print fork and eating status, update last meal timestamp.
+ * 3. Eat, release forks, and increment meal count if the simulation continues.
+ * 4. Print sleeping status and rest for the configured duration.
+ *
  * Fork acquisition follows the philosopher's assigned left and right fork
  * indices. Locks are released right after eating. The meal count is only
  * updated if the simulation is still running.
- * 
+ *
  * @param p Pointer to the philosopher.
- * 
+ *
  * @return Always returns NULL.
- * 
+ *
  * @note This function should be called within a thread created for a
  * philosopher.
  */
@@ -89,13 +89,13 @@ static void	*eat_sleep_routine(t_philo *p)
 }
 
 /**
- * @brief Simulates the philosopher thinking for a calculated duration. The
- * thinking time is computed based on the time to die, the time since the last
- * meal and the time to eat. It is also capped to a maximum of 200ms and a
- * minimum of 0.
- * 
+ * @brief Simulates the philosopher thinking for a calculated duration.
+ *
+ * The thinking time is derived from `time_to_die`, time since last meal, and
+ * `time_to_eat`, capped between 0 and 200ms.
+ *
  * @param p Pointer to the philosopher structure.
- * 
+ *
  * @return Always returns NULL.
  */
 static void	*think_routine(t_philo *p)
@@ -119,21 +119,18 @@ static void	*think_routine(t_philo *p)
 
 /**
  * @brief Main routine executed by each philosopher thread.
- * 
+ *
  * This function defines the behavior of a philosopher throughout the
  * simulation. It performs the following steps:
- * @brief 1 - Initializes the philosopher's `last_meal_time` to the table's
- * start time.
- * @brief 2 - Waits until the synchronized simulation start time using
- * `delay_start`.
- * @brief 3 - Continuously loops through eating, sleeping and thinking as long
- * as the simulation is running.
- * 
+ * 1. Initialize `last_meal_time` to the table's start time.
+ * 2. Wait for the synchronized start via `delay_start`.
+ * 3. Loop through eating, sleeping, and thinking while the simulation runs.
+ *
  * The loop condition is controlled by the shared simulation running flag,
  * which is mutex-protected.
- * 
+ *
  * @param d A void pointer to the philosopher structure.
- * 
+ *
  * @return Always returns NULL.
  */
 void	*philo_routine(void *d)

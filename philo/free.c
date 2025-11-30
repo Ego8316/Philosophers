@@ -14,7 +14,7 @@
 
 /**
  * @brief Destroys up to `size` mutexes of an array of mutexes.
- * 
+ *
  * @param m Array of mutexes to be destroyed.
  * @param size Size of the array.
  */
@@ -30,10 +30,10 @@ void	destroy_mutexes(pthread_mutex_t *m, int size)
 
 /**
  * @brief Frees up to `size` elements of an array of pointers.
- * 
+ *
  * @param arr Array of pointers to be freed.
  * @param size Size of the array.
- * 
+ *
  * @return Always returns NULL for convenience.
  */
 void	*free_array(void **arr, int size)
@@ -49,12 +49,11 @@ void	*free_array(void **arr, int size)
 }
 
 /**
- * @brief Frees up to `size` philo structures in an array of philosophers. Also
- * destroys all initiated mutexes.
- * 
+ * @brief Frees up to `size` philosopher structures and destroys their mutexes.
+ *
  * @param p Array of philosophers.
  * @param size Size of the array.
- * 
+ *
  * @return Always returns NULL for convenience.
  */
 void	*free_philos(t_philo **p, int size)
@@ -74,11 +73,11 @@ void	*free_philos(t_philo **p, int size)
 }
 
 /**
- * @brief Joins up to `size` philosopher's threads of an array of philosophers.
- * 
+ * @brief Joins up to `size` philosopher threads.
+ *
  * @param p Array of philosophers.
  * @param size Size of the array.
- * 
+ *
  * @return Always returns 0 for convenience.
  */
 int	join_philos(t_philo **p, int size)
@@ -92,11 +91,10 @@ int	join_philos(t_philo **p, int size)
 }
 
 /**
- * @brief Frees all there is to free in the table structure. Also destroys all
- * initiated mutexes.
- * 
+ * @brief Releases all table resources and destroys initialized mutexes.
+ *
  * @param t Pointer to the table structure.
- * 
+ *
  * @return Always returns NULL for convenience.
  */
 void	*free_table(t_table *t)

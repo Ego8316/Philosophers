@@ -14,13 +14,13 @@
 
 /**
  * @brief Initializes the mutexes required by the table structure.
- * 
+ *
  * Initializes the mutexes used for printing (`print_lock`) and controlling
  * simulation state (`sim_running_lock`). If either initialization fails,
  * previously initialized mutexes are destroyed to avoid leaks.
- * 
+ *
  * @param t Pointer to the table structure.
- * 
+ *
  * @return 1 on success, 0 on failure.
  */
 static int	initiate_table_mutexes(t_table *t)
@@ -36,12 +36,13 @@ static int	initiate_table_mutexes(t_table *t)
 }
 
 /**
- * @brief Initializes all mutexes inside each philosopher. If any initalization
- * fails, already initialized mutexes are destroyed.
- * 
+ * @brief Initializes all mutexes inside each philosopher.
+ *
+ * If any initialization fails, already initialized mutexes are destroyed.
+ *
  * @param p Array of philosopher structures.
  * @param n Number of philosophers.
- * 
+ *
  * @return 1 on success, 0 on failure.
  */
 static int	initiate_philo_mutexes(t_philo **p, int n)
@@ -72,19 +73,19 @@ static int	initiate_philo_mutexes(t_philo **p, int n)
 /**
  * @brief Allocates and initializes an array of philosopher structures given
  * the table configuration.
- * 
+ *
  * For each philosopher, allocates and initializes its structure with the
  * appropriate ID, pointer to the table, and assigned left and right forks. The
  * left and right forks are integers referring to indices in the shared forks
  * mutex array. Odd-numbered philosophers swap fork assignment to avoid
  * deadlock.
- * 
+ *
  * Once all philosophers are allocated, initializes their internal mutexes. If
  * any allocation or initialization fails, cleans up any allocated memory and
  * mutexes before returning NULL.
- * 
- * @param Pointer to the table.
- * 
+ *
+ * @param table Pointer to the table.
+ *
  * @return Allocated and initialized array of philosophers, NULL if memory
  * allocation fails or mutex initialization fails.
  */
@@ -116,12 +117,12 @@ static t_philo	**get_philos(t_table *table)
 
 /**
  * @brief Allocates and initializes all fork mutexes for philosophers.
- * 
+ *
  * Allocates and initializes one mutex per fork. If any mutex initialization
  * fails, all previously initialized mutexes are destroyed and memory is freed.
- * 
+ *
  * @param table Pointer to the table containing the number of philosophers.
- * 
+ *
  * @return Array of initialized mutexes, NULL on failure.
  */
 static pthread_mutex_t	*get_forks(t_table *table)
@@ -147,15 +148,15 @@ static pthread_mutex_t	*get_forks(t_table *table)
 
 /**
  * @brief Parses input and allocates the main simulation table.
- * 
+ *
  * Allocates memory for the simulation table and initializes all required
  * mutexes, philosophers and fork mutexes. If any allocation or mutex
  * initialization fails, previously allocated resources are properly freed.
  * Also prints the appropriate error message.
- * 
+ *
  * @param ac Argument count.
  * @param av Argument vector.
- * 
+ *
  * @return The fully initialized table structure, NULL on failure.
  */
 t_table	*get_table(int ac, char **av)

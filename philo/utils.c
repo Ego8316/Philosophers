@@ -14,10 +14,10 @@
 
 /**
  * @brief Gets the maximum value between two long integers.
- * 
+ *
  * @param a First long.
  * @param b Second long.
- * 
+ *
  * @return The maximum between a and b.
  */
 long	ft_max(long a, long b)
@@ -29,7 +29,7 @@ long	ft_max(long a, long b)
 
 /**
  * @brief Swaps the values of two pointers to integers.
- * 
+ *
  * @param a First pointer.
  * @param b Second pointer.
  */
@@ -43,12 +43,12 @@ void	swap_int(int *a, int *b)
 	return ;
 }
 
-/** 
+/**
  * @brief Compares two strings lexicographically.
- * 
+ *
  * @param s1 The first string.
  * @param s2 The second string.
- * 
+ *
  * @return 0 if the strings are equal, a positive value if s1 > s2,
  * or a negative value if s1 < s2.
  */
@@ -68,12 +68,12 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return (0);
 }
 
-/** 
+/**
  * @brief Allocates memory and initializes it to zero.
- * 
+ *
  * @param nmemb The number of elements.
  * @param size The size of each element.
- * 
+ *
  * @return A pointer to the allocated memory.
  */
 void	*ft_calloc(size_t nmemb, size_t size)
@@ -87,11 +87,11 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (array);
 }
 
-/** 
+/**
  * @brief Converts a string to an integer.
- * 
- * @param str The string to convert.
- * 
+ *
+ * @param nptr The string to convert.
+ *
  * @return The integer value of the string.
  */
 int	ft_atoi(const char *nptr)

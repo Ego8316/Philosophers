@@ -14,15 +14,15 @@
 
 /**
  * @brief Prints up to three strings to standard error and returns provided
- * status code. Also optionnally prints in red depending on status value.
- * 
+ * status code. Also optionally prints in red depending on status value.
+ *
  * @param s1 First string to be printed.
  * @param s2 Second string to be printed.
  * @param s3 Third string to be printed.
  * @param status Error code.
- * 
+ *
  * @return Provided status code.
- * 
+ *
  * @note Each string is optional.
  */
 int	errmsg(const char *s1, const char *s2, const char *s3, int status)
@@ -42,9 +42,9 @@ int	errmsg(const char *s1, const char *s2, const char *s3, int status)
 
 /**
  * @brief Prints one string in red to the standard error and returns NULL.
- * 
+ *
  * @param s String to be printed.
- * 
+ *
  * @return Always returns NULL for convenience.
  */
 void	*errmsg_null(const char *s)
@@ -58,7 +58,9 @@ void	*errmsg_null(const char *s)
 /**
  * @brief Displays on the standard error a help message in case the user does
  * not give a valid number of arguments.
- * 
+ *
+ * @param ac Argument count received by the program.
+ *
  * @return Always returns 1 for convenience.
  */
 int	put_help_message(int ac)

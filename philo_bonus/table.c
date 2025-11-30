@@ -15,14 +15,14 @@
 /**
  * @brief Allocates and initializes an array of philosopher structures given
  * the table configuration.
- * 
+ *
  * For each philosopher, allocates and initializes its structure with the
  * appropriate ID, pointer to the table and personal unique semaphore name.
- * 
+ *
  * If any allocation fails, cleans up any allocated memory and returns NULL.
- * 
- * @param Pointer to the table.
- * 
+ *
+ * @param table Pointer to the table.
+ *
  * @return Allocated and initialized array of philosophers, NULL if memory
  * allocation fails.
  */
@@ -49,15 +49,15 @@ static t_philo	**get_philos(t_table *table)
 
 /**
  * @brief Parses input and allocates the main simulation table.
- * 
+ *
  * Allocates memory for the simulation table and initializes all required
  * philosophers and global semaphores. If any allocation or initialization
  * fails, previously allocated resources are properly freed. Also prints the
  * appropriate error message.
- * 
+ *
  * @param ac Argument count.
  * @param av Argument vector.
- * 
+ *
  * @return The fully initialized table structure, NULL on failure.
  */
 t_table	*get_table(int ac, char **av)

@@ -40,13 +40,13 @@ int	wait_and_get_exit_code(pid_t pid)
 
 /**
  * @brief Launches the philosopher simulation.
- * 
+ *
  * Sets up the simulation by forking `n` philosopher processes. Starts
  * `reaper_routine` to monitor for death. If multiple philosophers and a meal
  * requirement are present, also launches `watchdog_routine`.
- * 
+ *
  * @param table Pointer to the table structure.
- * 
+ *
  * @return 1 on success, 0 on any failure (e.g. fork or thread error).
  */
 int	start_simulation(t_table *table)
@@ -76,13 +76,13 @@ int	start_simulation(t_table *table)
 }
 
 /**
- * @brief Collects exit statuses of all philosopher processes. 
- * 
+ * @brief Collects exit statuses of all philosopher processes.
+ *
  * Waits on each philosopher process. If any philosopher exits early while
  * simulation is still marked as running, forcefully ends the simulation.
- * 
+ *
  * @param table Pointer to the simulation table.
- * 
+ *
  * @return 1 if the early exit was detected and handled, 0 otherwise.
  */
 int	end_simulation(t_table *table)
@@ -110,14 +110,14 @@ int	end_simulation(t_table *table)
 
 /**
  * @brief Entry point of the philosopher simulation.
- * 
+ *
  * Validates user input, initializes the simulation table, and starts the
- * simulation. Waits for all created child processes, wait for all created
- * threads before freeing resources.
- * 
+ * simulation. Waits for all child processes and threads to finish before
+ * freeing resources.
+ *
  * @param ac Argument count.
  * @param av Argument vector.
- * 
+ *
  * @return 0 on successful execution, 1 if any error occurs.
  */
 int	main(int ac, char **av)

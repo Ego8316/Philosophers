@@ -12,11 +12,11 @@
 
 #include "philo.h"
 
-/** 
+/**
  * @brief Checks if a character is a space.
- * 
+ *
  * @param c The character to check.
- * 
+ *
  * @return 1 if the character is a space, 0 otherwise.
  */
 int	ft_isspace(int c)
@@ -24,11 +24,11 @@ int	ft_isspace(int c)
 	return (c == ' ' || (c >= '\t' && c <= '\r'));
 }
 
-/** 
+/**
  * @brief Checks if a character is a digit.
- * 
+ *
  * @param c The character to check.
- * 
+ *
  * @return 1 if the character is a digit, 0 otherwise.
  */
 int	ft_isdigit(int c)
@@ -38,13 +38,13 @@ int	ft_isdigit(int c)
 
 /**
  * @brief Checks if the given string represents a valid signed integer.
- * 
+ *
  * Skips leading whitespace characters, allows an optional '+' or '-' sign,
  * ensures that the rest of the string consists only of digits, and checks if
  * the parsed number does not overflow or underflow the limits of an integer.
- * 
+ *
  * @param s String to be checked.
- * 
+ *
  * @return 1 if the string is a valid integer within int range, 0 otherwise.
  */
 int	is_valid_integer(char *s)
@@ -73,19 +73,15 @@ int	is_valid_integer(char *s)
 }
 
 /**
- * @brief Valideates command-line arguments for the simulation.
- * 
- * Performs the following checks on each argument:
- * @brief - Not empty.
- * @brief - Represents a valid integer.
- * @brief - Is positive (greater than 0).
- * 
- * Also ensures the number of philosophers do not exceed `MAX_PHILO` and
- * prints on the standard error the appropriate error message.
- * 
+ * @brief Validates command-line arguments for the simulation.
+ *
+ * Each argument must be non-empty, represent a valid integer, and be strictly
+ * positive. Also ensures the philosopher count does not exceed `MAX_PHILO`
+ * and prints descriptive errors to standard error.
+ *
  * @param ac Argument count.
  * @param av Argument vector.
- * 
+ *
  * @return 1 if all inputs are valid, 0 otherwise.
  */
 int	is_valid_input(int ac, char **av)

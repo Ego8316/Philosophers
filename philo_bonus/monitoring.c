@@ -14,10 +14,11 @@
 
 /**
  * @brief Checks whether the simulation is still marked as running.
- * 
+ *
  * Reads the `sim_running` flag in a thread-safe way using its semaphore.
- * 
+ *
  * @param t Pointer to the table structure.
+ *
  * @return 1 if the simulation is still running, 0 otherwise.
  */
 int	is_simulation_running(t_table *t)
@@ -70,14 +71,14 @@ void	*hunger_routine(void *d)
 
 /**
  * @brief Monitor routine that waits for all philosophers to finish eating.
- * 
+ *
  * Runs as a dedicated thread in the main process. It blocks on the `meals_sem`
  * semaphore `n` times - once per philosopher - effectively waiting until all
  * philosophers have reached their required meal count. If the simulation is
  * still running when all are full, kills all philosophers and exits.
- * 
+ *
  * @param d A void pointer to the table structure.
- * 
+ *
  * @return Always returns NULL.
  */
 void	*watchdog_routine(void *d)
@@ -110,12 +111,12 @@ void	*watchdog_routine(void *d)
 }
 
 /**
- * @brief  Monitor routine that waits for the first philosopher death.
- * 
+ * @brief Monitor routine that waits for the first philosopher death.
+ *
  * Runs in the main process and waits on the shared `death_sem`. When signaled
  * and if the simulation is still running, kills all the child processes and
  * sets `sim_running` to 0.
- * 
+ *
  * @param d A void pointer to the table structure.
  * @return Always returns NULL.
  */

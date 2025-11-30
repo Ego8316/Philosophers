@@ -14,11 +14,11 @@
 
 /**
  * @brief Special routine for a solitary philosopher.
- * 
+ *
  * A single philosopher cannot eat as there is only one fork available. In that
  * grim scenario, the philosopher picks up the only fork and waits for its
  * tragic death. Posts `death_sem` on death to allow the reaper thread to exit.
- * 
+ *
  * @param p Pointer to the lonely philosopher.
  */
 static void	solitary_philosopher_routine(t_philo *p)
@@ -33,14 +33,14 @@ static void	solitary_philosopher_routine(t_philo *p)
 
 /**
  * @brief Philosopher's routine for eating and sleeping.
- * 
- * @brief 1 - Waits on the `forks_sem` semaphore to pick up both forks.
- * @brief 2 - Updates `last_meal_time` and prints status message.
- * @brief 3 - Eats for the configured duration.
- * @brief 4 - Releases both forks.
- * @brief 5 - If meal limit is specified and reached, posts to `meals_sem`.
- * @brief 6 - Sleeps for the configured duration.
- * 
+ *
+ * Steps:
+ * 1. Wait on `forks_sem` twice to take both forks.
+ * 2. Update `last_meal_time`, print status, and eat.
+ * 3. Release forks and, if a meal quota exists and is reached, post to
+ *    `meals_sem`.
+ * 4. Print sleeping status and rest for the configured duration.
+ *
  * @param p Pointer to the philosopher.
  */
 static void	eat_sleep_routine(t_philo *p)
@@ -63,11 +63,11 @@ static void	eat_sleep_routine(t_philo *p)
 }
 
 /**
- * @brief Simulates the philosopher thinking for a calculated duration. The
- * thinking time is computed based on the time to die, the time since the last
- * meal and the time to eat. It is also capped to a maximum of 200ms and a
- * minimum of 0.
- * 
+ * @brief Simulates the philosopher thinking for a calculated duration.
+ *
+ * The thinking time is derived from `time_to_die`, time since last meal, and
+ * `time_to_eat`, capped between 0 and 200ms.
+ *
  * @param p Pointer to the philosopher structure.
  */
 static void	think_routine(t_philo *p)
@@ -90,11 +90,11 @@ static void	think_routine(t_philo *p)
 
 /**
  * @brief Main philosopher routine executing the lifecycle loop.
- * 
+ *
  * Initializes last meal time, synchronizes start, and runs an infinite loop
  * of eating, sleeping and thinking. Odd philosophers start by thinking to
  * reduce deadlock risk.
- * 
+ *
  * @param p Pointer to the philosopher structure.
  */
 static void	philo_routine(t_philo *p)
@@ -114,12 +114,12 @@ static void	philo_routine(t_philo *p)
 
 /**
  * @brief Entry point for each philosopher process.
- * 
+ *
  * Handles single philosopher case, initializes semaphores, starts starvation
  * monitoring thread and runs the philosopher lifecycle. Cleans up and exits
  * gracefully on errors or completion.
- * 
- * @param d A void pointer to the philosopher structure.
+ *
+ * @param p Pointer to the philosopher structure.
  */
 void	philosopher(t_philo *p)
 {

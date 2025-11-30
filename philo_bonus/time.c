@@ -14,7 +14,7 @@
 
 /**
  * @brief Retrieves the current time in milliseconds since the Unix Epoch.
- * 
+ *
  * @return The current timestamp in milliseconds.
  */
 time_t	get_time_in_ms(void)
@@ -28,13 +28,13 @@ time_t	get_time_in_ms(void)
 /**
  * @brief Custom sleep function that pauses execution for a precise number of
  * milliseconds using a busy wait loop with micro-sleeps.
- * 
+ *
  * Standard sleep functions like `usleep` can be imprecise, especially for
  * small durations, often oversleeping due to OS scheduling or process delays.
- * This function mitigates that by continously polling the actual time,
+ * This function mitigates that by continuously polling the actual time,
  * ensuring a more accurate sleep duration, which is needed for this project.
- * Also helps avoiding conversion errors.
- * 
+ * Also helps avoid conversion errors.
+ *
  * @param wait_time Duration to sleep in milliseconds.
  */
 void	ft_usleep(time_t wait_time)
@@ -50,7 +50,7 @@ void	ft_usleep(time_t wait_time)
 /**
  * @brief Busy-waits until the given start time is reached. Used to ensure all
  * threads are synchronized before actually starting the simulation.
- * 
+ *
  * @param start_time The exact timestamp in milliseconds to wait until.
  */
 void	delay_start(time_t start_time)
